@@ -1,0 +1,31 @@
+
+.game {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-content: space-between;
+  max-width: 225px;
+  max-hight: 225px;
+  padding: 10px;
+  background-color: #333;
+  border: 5px solid #888;
+  border-radius: 50%;
+}
+
+#score {
+  position: absolute;
+  left: 0;
+  top: 45%;
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+  color: white;
+  line-height: 28px;
+  letter-spacing: 3px;
+}
+
+canvas {
+  padding: 5px 5px;
+  cursor: pointer;
+}
