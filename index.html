@@ -9,21 +9,22 @@
 </head>
 <body>
   <div class="container">
-  <h1>Simon</h1>
-    <p id="start">Start</p>
-    <label for=""><input type="checkbox" />Strict</label>
+<h1>Simon</h1>
+  <p id="start">Start</p>
+  <p id="reset">Reset Game</p>
+  <label for=""><input type="checkbox" />Strict</label>
+</div>
+
+<div class="game">
+<canvas id="canvas1" value="0" width="100" height="100"></canvas>
+<canvas id="canvas2" value="1" width="100" height="100"></canvas>
+
+  <span id="score">0</span>
+
+<canvas id="canvas3" value="2" width="100" height="100"></canvas>
+<canvas id="canvas4" value="3" width="100" height="100"></canvas>
   </div>
 
-  <div class="game">
-  <canvas id="canvas1" width="100" height="100"></canvas>
-  <canvas id="canvas2" width="100" height="100"></canvas>
-
-    <span id="score">20</span>
-
-  <canvas id="canvas3" width="100" height="100"></canvas>
-  <canvas id="canvas4" width="100" height="100"></canvas>
-    </div>
-
-
+<script src="app.js"></script>
 </body>
 </html>
