@@ -1,20 +1,32 @@
-var canvas1 = document.getElementById('canvas1'),
-    canvas2 = document.getElementById('canvas2'),
-    canvas3 = document.getElementById('canvas3'),
-    canvas4 = document.getElementById('canvas4'),
-    context1 = canvas1.getContext("2d"),
-    context2 = canvas2.getContext("2d"),
-    context3 = canvas3.getContext("2d"),
-    context4 = canvas4.getContext("2d")
+var drawingObj = {
+    canvas1: document.getElementById('canvas1'),
+    canvas2: document.getElementById('canvas2'),
+    canvas3: document.getElementById('canvas3'),
+    canvas4: document.getElementById('canvas4'),
+    context1: canvas1.getContext("2d"),
+    context2: canvas2.getContext("2d"),
+    context3: canvas3.getContext("2d"),
+    context4: canvas4.getContext("2d"),
+    drawSection: function(section, color, xCord, yCord, radius) {
+        section.beginPath();
+        section.fillStyle = color;
+        section.arc(xCord, yCord, radius, 0, 2.5 * Math.PI);
+        section.fill();
+    }
+}
+
 
 $("#reset").on('click', resetGame);
+$("input").on('click', setStrictMode);
 
 
-function drawSection(section, color, xCord, yCord, radius) {
-    section.beginPath();
-    section.fillStyle = color;
-    section.arc(xCord, yCord, radius, 0, 2.5 * Math.PI);
-    section.fill();
+function setStrictMode() {
+    if ($(this).is(':checked')) {
+        gameStats.strictMode = true;
+    } else {
+        gameStats.strictMode = false;
+    }
+    console.log(gameStats.strictMode);
 }
 
 function enablePressing() {
@@ -32,14 +44,14 @@ function disablePressing() {
 }
 //drawing the gameboard
 window.onload = function() {
-    drawSection(context1, 'red', 100, 100, 100);
-    drawSection(context1, '#333', 100, 100, 25);
-    drawSection(context2, 'blue', 0, 100, 100);
-    drawSection(context3, 'yellow', 100, 0, 100);
-    drawSection(context4, 'green', 0, 0, 100);
-    drawSection(context2, '#333', 0, 100, 25);
-    drawSection(context3, '#333', 100, 0, 25);
-    drawSection(context4, '#333', 0, 0, 25);
+    drawingObj.drawSection(drawingObj.context1, 'red', 100, 100, 100);
+    drawingObj.drawSection(drawingObj.context1, '#333', 100, 100, 25);
+    drawingObj.drawSection(drawingObj.context2, 'blue', 0, 100, 100);
+    drawingObj.drawSection(drawingObj.context3, 'yellow', 100, 0, 100);
+    drawingObj.drawSection(drawingObj.context4, 'green', 0, 0, 100);
+    drawingObj.drawSection(drawingObj.context2, '#333', 0, 100, 25);
+    drawingObj.drawSection(drawingObj.context3, '#333', 100, 0, 25);
+    drawingObj.drawSection(drawingObj.context4, '#333', 0, 0, 25);
 }
 
 //game functions
@@ -139,6 +151,7 @@ function pressGreen() {
 $("#start").on('click', startGame);
 
 var gameStats = {
+    strictMode: false,
     round: 0,
     score: 0,
     playerAttempts: 0,
@@ -199,6 +212,7 @@ function startGame() {
     console.log(gameStats.compMoves);
     compPlay = setInterval(increaseIndex, 1000);
     console.log(gameStats.playerIndex);
+    console.log("mode=" + gameStats.strictMode);
     $(this).off();
 }
 
@@ -216,6 +230,7 @@ function updatePlayerMove(indexPlayed) {
     gameStats.playerIndex += 1;
     gameStats.playerAttempts += 1;
     console.log("PlayerUpdated");
+    console.log("mode=" + gameStats.strictMode);
     console.log(gameStats.playerTurn);
     console.log("PlayerIndex" + gameStats.playerIndex);
     console.log("playerMoves" + gameStats.playerMoves[gameStats.playerIndex]);
@@ -225,29 +240,55 @@ function updatePlayerMove(indexPlayed) {
 
 function checkPlayerMove() {
     console.log("checkPlayer");
-    console.log("round" + (gameStats.round));
-    console.log("len" + gameStats.playerMoves.length);
-    console.log("compIndex" + gameStats.compIndex);
-    console.log("PlayerIndex1" + gameStats.playerIndex);
-    console.log("playerMoves1" + gameStats.playerMoves[gameStats.playerIndex]);
-    console.log("compMoves1" + gameStats.compMoves[gameStats.playerIndex]);
-    if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
-        disablePressing();
-        gameStats.playerTurn = false;
-        gameStats.playerIndex = -1;
-        gameStats.playerMoves = [];
-        console.log("You did not match");
-        $("#score").text("!!");
-        setTimeout(replayLastCompMoves, 500);
-    }
+    // console.log("round" + (gameStats.round));
+    // console.log("len" + gameStats.playerMoves.length);
+    // console.log("compIndex" + gameStats.compIndex);
+    // console.log("PlayerIndex1" + gameStats.playerIndex);
+    // console.log("playerMoves1" + gameStats.playerMoves[gameStats.playerIndex]);
+    // console.log("compMoves1" + gameStats.compMoves[gameStats.playerIndex]);
+    console.log("mode=" + gameStats.strictMode);
 
-    if (gameStats.round == gameStats.playerMoves.length) {
+    if (gameStats.strictMode) {
+        console.log("strChkmode=" + gameStats.strictMode);
+        strictModeCheckPlayerMove();
+        console.log("check0");
+    } else {
+
+        if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
+            disablePressing();
+            gameStats.playerTurn = false;
+            gameStats.playerIndex = -1;
+            gameStats.playerMoves = [];
+            console.log("You did not match");
+            $("#score").text("!!");
+            setTimeout(replayLastCompMoves, 500);
+            console.log("check1");
+        }
+
+        if (gameStats.round == gameStats.playerMoves.length) {
+            disablePressing();
+            gameStats.playerTurn = false;
+            gameStats.playerIndex = -1;
+            gameStats.playerMoves = [];
+            console.log("compTurn");
+            playCompMoves();
+            console.log("check3");
+        }
+    }
+}
+
+//strict mode game logic
+function strictModeCheckPlayerMove() {
+    if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
+        resetGame();
+        console.log("check4");
+    } else if (gameStats.round == gameStats.playerMoves.length) {
         disablePressing();
         gameStats.playerTurn = false;
         gameStats.playerIndex = -1;
         gameStats.playerMoves = [];
         console.log("compTurn");
         playCompMoves();
+        console.log("check5");
     }
-
 }
