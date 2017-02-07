@@ -7,15 +7,31 @@ var canvas1 = document.getElementById('canvas1'),
     context3 = canvas3.getContext("2d"),
     context4 = canvas4.getContext("2d")
 
+$("#reset").on('click', resetGame);
+
+
 function drawSection(section, color, xCord, yCord, radius) {
-  section.beginPath();
-  section.fillStyle = color;
-  section.arc(xCord, yCord, radius, 0, 2.5*Math.PI);
-  section.fill();
+    section.beginPath();
+    section.fillStyle = color;
+    section.arc(xCord, yCord, radius, 0, 2.5 * Math.PI);
+    section.fill();
 }
 
+function enablePressing() {
+    $("#canvas1").on('click', pressRed);
+    $("#canvas2").on('click', pressBlue);
+    $("#canvas3").on('click', pressYellow);
+    $("#canvas4").on('click', pressGreen);
+}
+
+function disablePressing() {
+    $("#canvas1").off();
+    $("#canvas2").off();
+    $("#canvas3").off();
+    $("#canvas4").off();
+}
 //drawing the gameboard
- window.onload = function() {
+window.onload = function() {
     drawSection(context1, 'red', 100, 100, 100);
     drawSection(context1, '#333', 100, 100, 25);
     drawSection(context2, 'blue', 0, 100, 100);
@@ -28,114 +44,210 @@ function drawSection(section, color, xCord, yCord, radius) {
 
 //game functions
 function pressRed() {
-  var redSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
-  redSound.play();
-  drawSection(context1, '#FF4F4F', 100, 100, 100);
+    var redSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
+    redSound.play();
+    drawSection(context1, '#FF4F4F', 100, 100, 100);
     drawSection(context1, '#333', 100, 100, 25);
-  setTimeout(function(){
-    context1.beginPath();
-    context1.fillStyle = "red";
-    context1.arc(100, 100, 100, 0, 2.5*Math.PI);
-    context1.fill();
-    context1.beginPath();
-    context1.fillStyle = '#333';
-    context1.arc(100, 100, 25, 0, 2.5*Math.PI);
-    context1.fill();
-  }, 500)
+    setTimeout(function() {
+        context1.beginPath();
+        context1.fillStyle = "red";
+        context1.arc(100, 100, 100, 0, 2.5 * Math.PI);
+        context1.fill();
+        context1.beginPath();
+        context1.fillStyle = '#333';
+        context1.arc(100, 100, 25, 0, 2.5 * Math.PI);
+        context1.fill();
+    }, 500);
+
+    if (gameStats.playerTurn) {
+        var moveIndex = $(this).attr('value');
+        updatePlayerMove(moveIndex);
+        checkPlayerMove();
+    }
+
 }
 
 function pressBlue() {
-  var blueSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
-  blueSound.play();
-  drawSection(context2, '#4F4FFF', 0, 100, 100);
-  drawSection(context2, '#333', 0, 100, 25);
-  setTimeout(function(){
-    context2.beginPath();
-    context2.fillStyle = "blue";
-    context2.arc(0, 100, 100, 0, 2.5*Math.PI);
-    context2.fill();
-    context2.beginPath();
-    context2.fillStyle = '#333';
-    context2.arc(0, 100, 25, 0, 2.5*Math.PI);
-    context2.fill();
-  }, 500)
+    var blueSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
+    blueSound.play();
+    drawSection(context2, '#4F4FFF', 0, 100, 100);
+    drawSection(context2, '#333', 0, 100, 25);
+    setTimeout(function() {
+        context2.beginPath();
+        context2.fillStyle = "blue";
+        context2.arc(0, 100, 100, 0, 2.5 * Math.PI);
+        context2.fill();
+        context2.beginPath();
+        context2.fillStyle = '#333';
+        context2.arc(0, 100, 25, 0, 2.5 * Math.PI);
+        context2.fill();
+    }, 500);
+
+    if (gameStats.playerTurn) {
+        var moveIndex = $(this).attr('value');
+        updatePlayerMove(moveIndex);
+        checkPlayerMove();
+    }
 }
 
 function pressYellow() {
-  var yelloSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
-  yelloSound.play();
-  drawSection(context3, '#FFFF7F', 100, 0, 100);
-  drawSection(context3, '#333', 100, 0, 25);
-  setTimeout(function(){
-    context3.beginPath();
-    context3.fillStyle = "yellow";
-    context3.arc(100, 0, 100, 0, 2.5*Math.PI);
-    context3.fill();
-    context3.beginPath();
-    context3.fillStyle = '#333';
-    context3.arc(100, 0, 25, 0, 2.5*Math.PI);
-    context3.fill();
-  }, 500)
+    var yelloSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
+    yelloSound.play();
+    drawSection(context3, '#FFFF7F', 100, 0, 100);
+    drawSection(context3, '#333', 100, 0, 25);
+    setTimeout(function() {
+        context3.beginPath();
+        context3.fillStyle = "yellow";
+        context3.arc(100, 0, 100, 0, 2.5 * Math.PI);
+        context3.fill();
+        context3.beginPath();
+        context3.fillStyle = '#333';
+        context3.arc(100, 0, 25, 0, 2.5 * Math.PI);
+        context3.fill();
+    }, 500);
+
+    if (gameStats.playerTurn) {
+        var moveIndex = $(this).attr('value');
+        updatePlayerMove(moveIndex);
+        checkPlayerMove();
+    }
 }
 
 function pressGreen() {
-  var greenSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
-  greenSound.play();
-  drawSection(context4, '#408040', 0, 0, 100);
-  drawSection(context4, '#333', 0, 0, 25);
-  setTimeout(function(){
-    context4.beginPath();
-    context4.fillStyle = "green";
-    context4.arc(0, 0, 100, 0, 2.5*Math.PI);
-    context4.fill();
-    context4.beginPath();
-    context4.fillStyle = '#333';
-    context4.arc(0, 0, 25, 0, 2.5*Math.PI);
-    context4.fill();
-  }, 500)
+    var greenSound = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
+    greenSound.play();
+    drawSection(context4, '#408040', 0, 0, 100);
+    drawSection(context4, '#333', 0, 0, 25);
+    setTimeout(function() {
+        context4.beginPath();
+        context4.fillStyle = "green";
+        context4.arc(0, 0, 100, 0, 2.5 * Math.PI);
+        context4.fill();
+        context4.beginPath();
+        context4.fillStyle = '#333';
+        context4.arc(0, 0, 25, 0, 2.5 * Math.PI);
+        context4.fill();
+    }, 300);
+
+    if (gameStats.playerTurn) {
+        var moveIndex = $(this).attr('value');
+        updatePlayerMove(moveIndex);
+        checkPlayerMove();
+    }
+}
+//game functionality
+$("#start").on('click', startGame);
+
+var gameStats = {
+    round: 0,
+    score: 0,
+    playerAttempts: 0,
+    playerTurn: false,
+    compMoves: [],
+    playerMoves: [],
+    compIndex: -1,
+    playerIndex: -1,
+    generateCompMoves: function() {
+        for (var i = 0; i < 20; i++) {
+            this.compMoves.push(Math.floor(Math.random() * 4));
+        }
+    }
 }
 
-//event handles
-$("#canvas1").on('click', pressRed);
-$("#canvas2").on('click', pressBlue);
-$("#canvas3").on('click', pressYellow);
-$("#canvas4").on('click', pressGreen);
-
-function randomNumber(){
-  switch(Math.floor(Math.random()*4)){
-    case 0:
-      pressRed();
-      break;
-    case 1:
-      pressBlue();
-      break;
-    case 2:
-      pressYellow();
-      break;
-    case 3:
-      pressGreen();
-      break;                                    }
+function resetGame() {
+    console.log("clicked");
+    gameStats.round = 0;
+    gameStats.score = 0;
+    gameStats.playerTurn = false;
+    gameStats.compMoves = [];
+    gameStats.playerMoves = [];
+    gameStats.compIndex = -1;
+    gameStats.playerIndex = -1;
+    disablePressing();
+    $("#score").text(0);
 }
 
-var compMoves = [];
-$("#start").on('click', randomNumber)
+function increaseIndex() {
+    $("#score").text(gameStats.round);
+    ++gameStats.compIndex;
+    if (gameStats.compIndex >= gameStats.round) {
+        gameStats.compIndex = -1;
+        clearInterval(compPlay);
+        enablePressing();
+        gameStats.playerTurn = true;
+    }
+    switch (gameStats.compMoves[gameStats.compIndex]) {
+        case 0:
+            pressRed();
+            break;
+        case 1:
+            pressBlue();
+            break;
+        case 2:
+            pressYellow();
+            break;
+        case 3:
+            pressGreen();
+            break;
+    }
 
-function generateCompMoves(){
-  for(var i = 0; i < 20; i++){
-    compMoves.push(Math.floor(Math.random()*4));
-  }
 }
 
-generateCompMoves();
-console.log(compMoves);
+function startGame() {
+    gameStats.generateCompMoves();
+    gameStats.round += 1;
+    console.log(gameStats.compMoves);
+    compPlay = setInterval(increaseIndex, 1000);
+    console.log(gameStats.playerIndex);
+    $(this).off();
+}
 
-setTimeout(function(){
+function playCompMoves() {
+    gameStats.round += 1;
+    compPlay = setInterval(increaseIndex, 1000);
+}
 
+function replayLastCompMoves() {
+    compPlay = setInterval(increaseIndex, 1000);
+}
 
-});
-compMoves.forEach(function(el){
-      el === 0 ?  pressRed() : 0;
-      el === 1 ?  pressBlue() : 0;
-      el === 2 ?  pressYellow() : 0;
-      el === 3 ?  pressGreen() : 0;
-});
+function updatePlayerMove(indexPlayed) {
+    gameStats.playerMoves.push(indexPlayed);
+    gameStats.playerIndex += 1;
+    gameStats.playerAttempts += 1;
+    console.log("PlayerUpdated");
+    console.log(gameStats.playerTurn);
+    console.log("PlayerIndex" + gameStats.playerIndex);
+    console.log("playerMoves" + gameStats.playerMoves[gameStats.playerIndex]);
+    console.log("compMoves" + gameStats.compMoves[gameStats.playerIndex]);
+
+}
+
+function checkPlayerMove() {
+    console.log("checkPlayer");
+    console.log("round" + (gameStats.round));
+    console.log("len" + gameStats.playerMoves.length);
+    console.log("compIndex" + gameStats.compIndex);
+    console.log("PlayerIndex1" + gameStats.playerIndex);
+    console.log("playerMoves1" + gameStats.playerMoves[gameStats.playerIndex]);
+    console.log("compMoves1" + gameStats.compMoves[gameStats.playerIndex]);
+    if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
+        disablePressing();
+        gameStats.playerTurn = false;
+        gameStats.playerIndex = -1;
+        gameStats.playerMoves = [];
+        console.log("You did not match");
+        $("#score").text("!!");
+        setTimeout(replayLastCompMoves, 500);
+    }
+
+    if (gameStats.round == gameStats.playerMoves.length) {
+        disablePressing();
+        gameStats.playerTurn = false;
+        gameStats.playerIndex = -1;
+        gameStats.playerMoves = [];
+        console.log("compTurn");
+        playCompMoves();
+    }
+
+}
