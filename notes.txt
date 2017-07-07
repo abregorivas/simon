@@ -1,0 +1,6 @@
+window sizing for canvas abstract to a pct of the size of the window object
+remove canvas and go to css
+
+given a length and digit boundries
+1. generate a  an array of 20 in length of 1-4 digits  G R Y B
+
