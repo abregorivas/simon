@@ -225,6 +225,7 @@ h2 {
     display: block;
     border: 8px solid black;
     padding: 0;
+    margin-left: 10px;
 }
 
 .resetBtn {
@@ -240,10 +241,15 @@ h2 {
 
 .bottomSection {
     display: flex;
-    justify-content: space-around;
-    // margin: 5px 0;
+    justify-content: flex-start;
     width: 100%;
 }
+.bottomSection p {
+    display: block;
+    min-width: 100px;
+    text-align: center;
+}
+
 
 .score {
     background-color: black;

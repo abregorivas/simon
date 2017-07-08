@@ -3,6 +3,13 @@
 //DOM Events
 var $onOffSwitch = $("#myonoffswitch");
 
+var audioObj = {
+  redSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+  blueSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
+  yellowSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+  greenSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")
+};
+
   var generateRandNum = function generateRandNum(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
@@ -45,18 +52,22 @@ var highlight = function highlight(event){
     case 'greenGamePiece':
     $(event.target).addClass('glowGreen');
     glowApplied = 'glowGreen';
+    audioObj .greenSound.play();
     break;
     case 'redGamePiece':
     $(event.target).addClass('glowRed');
     glowApplied = 'glowRed';
+    audioObj .redSound.play();
     break;
     case 'yellowGamePiece':
     $(this).addClass('glowYellow');
     glowApplied = 'glowYellow';
+    audioObj .yellowSound.play();
     break;
     case 'blueGamePiece':
     $(this).addClass('glowBlue');
     glowApplied = 'glowBlue';
+    audioObj .blueSound.play();
     break;
   default:
     break;

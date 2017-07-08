@@ -226,6 +226,7 @@ h2 {
   display: block;
   border: 8px solid black;
   padding: 0;
+  margin-left: 10px;
 }
 
 .resetBtn {
@@ -241,8 +242,14 @@ h2 {
 
 .bottomSection {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   width: 100%;
+}
+
+.bottomSection p {
+  display: block;
+  min-width: 100px;
+  text-align: center;
 }
 
 .score {
