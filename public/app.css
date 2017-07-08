@@ -4,13 +4,16 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 850px;
-  height: 850px;
+  width: 840px;
+  height: 840px;
   left: 50%;
   top: 50%;
   margin-top: -400px;
   margin-left: -400px;
   background-color: grey;
+  border-radius: 425px;
+  background-color: black;
+  padding: 10px;
 }
 
 .greenGamePiece {
@@ -19,7 +22,12 @@
   border: 200px solid transparent;
   border-top-left-radius: 400px;
   background-color: #00FF00;
-  margin-right: 25px;
+  margin-right: 10px;
+}
+
+.glowGreen.greenGamePiece {
+  transition: 2s;
+  background-color: red;
 }
 
 .redGamePiece {
@@ -28,6 +36,7 @@
   border: 200px solid transparent;
   border-top-right-radius: 400px;
   background-color: #FF0000;
+  margin-left: 10px;
 }
 
 .yellowGamePiece {
@@ -36,6 +45,7 @@
   border: 200px solid transparent;
   border-bottom-left-radius: 400px;
   background-color: #FFFF00;
+  margin-right: 10px;
 }
 
 .blueGamePiece {
@@ -44,14 +54,12 @@
   border: 200px solid transparent;
   border-bottom-right-radius: 400px;
   background-color: #0000FF;
+  margin-left: 10px;
 }
 
 .onoffswitch {
   position: relative;
   max-width: 90px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 .onoffswitch-checkbox {
@@ -127,8 +135,8 @@
 
 .cover {
   position: absolute;
-  height: 200px;
-  width: 200px;
+  height: 220px;
+  width: 220px;
   border-radius: 50%;
   background-color: black;
   top: 50%;
@@ -165,3 +173,8 @@ button {
   margin: 5px 0;
   width: 100%;
 }
+
+.glowBlue {
+  box-shadow: -50px -5px 10px lightblue;
+}
+/*# sourceMappingURL=app.css.map*/

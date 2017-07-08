@@ -57,7 +57,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "./public/";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 0);
@@ -78,64 +78,66 @@ module.exports = __webpack_require__(2);
 "use strict";
 
 
-(function IIFE($, window, document) {
-  $(function () {});
+//DOM Events
+var $onOffSwitch = $("#myonoffswitch");
 
-  "use strict";
+var generateRandNum = function generateRandNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
-  //DOM Events
-  var $onOffSwitch = $("#myonoffswitch");
+var generateCompMoves = function generateCompMoves(len) {
+  var results = [];
+  var i = 0;
+  for (; i < len; i++) {
+    results.push(generateRandNum(1, 4));
+  }
+  return results;
+};
 
-  var generateRandNum = function generateRandNum(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
+//capture users selection
+//check users sequence
 
-  var generateCompMoves = function generateCompMoves(len) {
-    var results = [];
-    var i = 0;
-    for (; i < len; i++) {
-      results.push(generateRandNum(1, 4));
-    }
-    return results;
-  };
+//check if user is on strict mode
+var strictModeStatus;
+var gameStarted = false;
 
-  //capture users selection
-  //check users sequence
+$onOffSwitch.on('click', function (event) {
+  if (gameStarted) {
+    event.preventDefault();
+  } else {
+    strictModeStatus = event.target.checked;
+  }
+  // if(!status){
+  //   // event.preventDefault();
+  //   event.stopPropagation();
+  // }
+  // console.log($("#myonoffswitch").is(':checked'));
+});
 
-  //check if user is on strict mode
-  var strictModeStatus;
-  var gameStarted = false;
+var highlight = function highlight(event) {
+  $(this).addClass('glowGreen');
+  console.log(event);
+  setTimeout(function () {
+    $(event.target).removeClass('glowGreen');
+  }, 2500);
+};
 
-  $onOffSwitch.on('click', function (event) {
-    if (gameStarted) {
-      event.preventDefault();
-    } else {
-      strictModeStatus = event.target.checked;
-    }
-    // if(!status){
-    //   // event.preventDefault();
-    //   event.stopPropagation();
-    // }
-    // console.log($("#myonoffswitch").is(':checked'));
-  });
+$(".greenGamePiece").on('click', highlight);
 
-  $(".greenGamePiece").on('click', function () {
-    console.log(strictModeStatus);
-  });
-  $("button").on("click", function () {
-    gameStarted ? gameStarted = false : gameStarted = true;
-    console.log("gameStared: ", gameStarted);
-  });
-  console.log(generateCompMoves(20));
-})(window.jQuery, window, document);
+$("button").on("click", function () {
+  gameStarted ? gameStarted = false : gameStarted = true;
+  console.log("gameStared: ", gameStarted);
+});
+console.log(generateCompMoves(20));
 
-function getClickPosition(e) {
-  var xPosition = e.clientX;
-  var yPosition = e.clientY;
-  console.log("x: ", xPosition, "y: ", yPosition);
-}
+// function getClickPosition(e) {
+//     var xPosition = e.clientX;
+//     var yPosition = e.clientY;
+//     console.log("x: ", xPosition, "y: ", yPosition);
+// }
 
-window.addEventListener('click', getClickPosition);
+
+// window.addEventListener('click', getClickPosition);
 // (function IIFE($, window, document) {
 //   // Locally scope $
 //   $(function () {
@@ -459,3 +461,4 @@ window.addEventListener('click', getClickPosition);
 
 /***/ })
 /******/ ]);
+//# sourceMappingURL=app.js.map

@@ -6,24 +6,25 @@ const glob = require('glob');
 const PurifyCSSPlugin = require('purifycss-webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-module.exports = {
+module.exports =  {
   entry: {
     app: [
       "./src/index.js",
-      './src/scss/main.scss',
-
+      './src/scss/main.scss'
     ]
   },
   output: {
     path: path.resolve(__dirname, './public'),
-    filename: "[name].js"
+    filename: "[name].js",
+    publicPath:'./public/'
   },
+  devtool:  'source-map' ,
   module: {
     rules: [{
         test: /\.s[ac]ss$/,
         use: ExtractTextPlugin.extract({
-          use: ['css-loader', 'sass-loader'],
-          fallback: 'style-loader'
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
         })
       },
       {
@@ -50,12 +51,15 @@ module.exports = {
       root: __dirname,
       verbose: true,
       dry: false,
-      exclude: [ 'index.html' ]
+      exclude: ['sounds' ,   'index.html' ]
     }),
     new ExtractTextPlugin('[name].css'),
     new PurifyCSSPlugin({
       paths: glob.sync(path.join(__dirname, 'public/*.html')),
-      minimize: inProduction
+      minimize: inProduction,
+      purifyOptions: {
+        whitelist:['glowGreen', 'glowBlue']
+}
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: inProduction

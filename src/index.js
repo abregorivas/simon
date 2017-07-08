@@ -1,9 +1,4 @@
-(function IIFE($, window, document){
-  $(function(){
 
-  });
-
-  "use strict"
 
 //DOM Events
 var $onOffSwitch = $("#myonoffswitch");
@@ -41,27 +36,35 @@ $onOffSwitch.on('click', function(event){
   // console.log($("#myonoffswitch").is(':checked'));
 })
 
-$(".greenGamePiece").on('click', function(){
-  console.log(strictModeStatus)
-})
+var highlight = function highlight(event){
+  $(this).addClass('glowGreen');
+  console.log(event);
+  setTimeout(function(){
+    $(event.target).removeClass('glowGreen');
+  }, 2500);
+}
+
+$(".greenGamePiece").on('click', highlight);
+
+
+
 $("button").on("click",function(){
   gameStarted ? gameStarted = false: gameStarted = true;
   console.log("gameStared: ", gameStarted);
 })
 console.log(generateCompMoves(20));
 
-})(window.jQuery, window, document);
 
 
 
-function getClickPosition(e) {
-    var xPosition = e.clientX;
-    var yPosition = e.clientY;
-    console.log("x: ", xPosition, "y: ", yPosition);
-}
+// function getClickPosition(e) {
+//     var xPosition = e.clientX;
+//     var yPosition = e.clientY;
+//     console.log("x: ", xPosition, "y: ", yPosition);
+// }
 
 
-window.addEventListener('click', getClickPosition);
+// window.addEventListener('click', getClickPosition);
 // (function IIFE($, window, document) {
 //   // Locally scope $
 //   $(function () {

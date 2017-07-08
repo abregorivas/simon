@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack",
+    "watch": "webpack --watch",
     "production": "NODE_ENV=production webpack",
-    "start": "npm run dev -- --watch && node server.js"
+    "prestart": "webpack -p",
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "Roland Abregorivas",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.16",
+    "express": "^4.15.3",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
     "image-loader": "0.0.1",
@@ -31,6 +33,6 @@
     "sass-loader": "^6.0.6",
     "standard": "^10.0.2",
     "style-loader": "^0.18.2",
-    "webpack": "^3.0.0"
+    "webpack": "^3.1.0"
   }
 }
