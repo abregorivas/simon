@@ -115,14 +115,41 @@ $onOffSwitch.on('click', function (event) {
 });
 
 var highlight = function highlight(event) {
-  $(this).addClass('glowGreen');
+  var colorHighlight = ['glowGreen', 'glowRed', 'glowYello', 'glowBlue'];
+  var glowApplied = void 0;
+  var gamePiece = event.target.id;
+  console.log(gamePiece);
+  switch (gamePiece) {
+    case 'greenGamePiece':
+      $(event.target).addClass('glowGreen');
+      glowApplied = 'glowGreen';
+      break;
+    case 'redGamePiece':
+      $(event.target).addClass('glowRed');
+      glowApplied = 'glowRed';
+      break;
+    case 'yellowGamePiece':
+      $(this).addClass('glowYellow');
+      glowApplied = 'glowYellow';
+      break;
+    case 'blueGamePiece':
+      $(this).addClass('glowBlue');
+      glowApplied = 'glowBlue';
+      break;
+    default:
+      break;
+  }
+
   console.log(event);
   setTimeout(function () {
-    $(event.target).removeClass('glowGreen');
-  }, 2500);
+    $(event.target).removeClass(glowApplied);
+  }, 800);
 };
 
-$(".greenGamePiece").on('click', highlight);
+$("#greenGamePiece").on('click', highlight);
+$("#redGamePiece").on('click', highlight);
+$("#yellowGamePiece").on('click', highlight);
+$("#blueGamePiece").on('click', highlight);
 
 $("button").on("click", function () {
   gameStarted ? gameStarted = false : gameStarted = true;

@@ -58,7 +58,7 @@ module.exports =  {
       paths: glob.sync(path.join(__dirname, 'public/*.html')),
       minimize: inProduction,
       purifyOptions: {
-        whitelist:['glowGreen', 'glowBlue']
+        whitelist:['glowGreen', 'glowBlue', 'glowRed', 'glowYellow']
 }
     }),
     new webpack.LoaderOptionsPlugin({
