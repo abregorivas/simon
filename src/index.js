@@ -1,27 +1,85 @@
-
-
-//DOM Events
 var $onOffSwitch = $("#myonoffswitch");
+var $playBtn = $(".playBtn");
+var $resetBtn = $(".resetBtn");
 
-var audioObj = {
-  redSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-  blueSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
-  yellowSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-  greenSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")
-};
+//audio files are indexed the same as glow colors green ,red, yellow and blue
+var audioObj = [
+  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
+  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
+  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
+   new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")
+]
 
-  var generateRandNum = function generateRandNum(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
+console.log(audioObj[0].play());
+var gameStats = {
+  glowClasses: ['glowGreen', 'glowRed', 'glowYellow', 'glowBlue'],
+  compMoves: [],
+  playerMoves: [],
+  gameRound: 10,
+  strictMode: 0,
+  bestScore: 0,
+  difficulty: 1,
+  compTurn: true
+}
+
+var generateRandNum = function generateRandNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+var generateCompMoves = function generateCompMoves(len) {
+  let results = [];
+  let i = 0;
+  for (; i < len; i++) {
+    results.push(generateRandNum(0, 4));
   }
+  return results;
+}
 
-  var generateCompMoves = function generateCompMoves(len){
-    let results =[];
-    let i = 0;
-    for(;i< len; i++){
-      results.push(generateRandNum(1,4));
-    }
-    return results;
-  }
+var startGame = function startGame() {
+  //get computer moves
+  gameStats.compMoves = generateCompMoves(20);
+  //play index of comp move for current game round
+
+}
+
+var resetGame = function resetGame() {
+  gameStats.playerMoves = [];
+  gameStats.gameRound = 0;
+  gameStats.compMoves = [];
+}
+
+//itterate through the array for a give
+var playCompMoves = function playCompMoves(compMoves, gameRound, glowClasses) {
+  var $gamePieces = $(".gameContainer").children();
+  var compMoves = compMoves.slice(0, gameRound);
+  console.log(compMoves);
+  compMoves.forEach(function (el, index) {
+    setTimeout(function () {
+      $gamePieces.eq(el).addClass(glowClasses[el]);
+      setTimeout(function(){
+        audioObj[el].play();
+      }, 50);
+      setTimeout(function () {
+        $gamePieces.eq(el).removeClass(glowClasses[el]);
+      }, 400);
+    }, 450 * (index + 1));
+
+  })
+}
+
+//run this when app launches to have all four pieces highlighted
+var initializeGame = function initGame() {
+  setTimeout(function () {
+    var moves = [0, 1, 2, 3]
+    playCompMoves(moves, 4, gameStats.glowClasses)
+  }, 1000)
+}
+
+initializeGame()
+
+$playBtn.on('click', function(){
+  playCompMoves()
+});
 
 //capture users selection
 //check users sequence
@@ -30,11 +88,11 @@ var audioObj = {
 var strictModeStatus;
 var gameStarted = false;
 
-$onOffSwitch.on('click', function(event){
-  if(gameStarted){
+$onOffSwitch.on('click', function (event) {
+  if (gameStarted) {
     event.preventDefault();
   } else {
-  strictModeStatus = event.target.checked;
+    strictModeStatus = event.target.checked;
   }
   // if(!status){
   //   // event.preventDefault();
@@ -43,38 +101,38 @@ $onOffSwitch.on('click', function(event){
   // console.log($("#myonoffswitch").is(':checked'));
 })
 
-var highlight = function highlight(event){
-  let colorHighlight =['glowGreen', 'glowRed', 'glowYello', 'glowBlue'];
+var highlight = function highlight(event) {
+  let colorHighlight = ['glowGreen', 'glowRed', 'glowYello', 'glowBlue'];
   let glowApplied;
   var gamePiece = event.target.id;
   console.log(gamePiece);
-  switch(gamePiece){
+  switch (gamePiece) {
     case 'greenGamePiece':
-    $(event.target).addClass('glowGreen');
-    glowApplied = 'glowGreen';
-    audioObj .greenSound.play();
-    break;
+      $(event.target).addClass('glowGreen');
+      glowApplied = 'glowGreen';
+      audioObj[0].play();
+      break;
     case 'redGamePiece':
-    $(event.target).addClass('glowRed');
-    glowApplied = 'glowRed';
-    audioObj .redSound.play();
-    break;
+      $(event.target).addClass('glowRed');
+      glowApplied = 'glowRed';
+      audioObj[1].play();
+      break;
     case 'yellowGamePiece':
-    $(this).addClass('glowYellow');
-    glowApplied = 'glowYellow';
-    audioObj .yellowSound.play();
-    break;
+      $(this).addClass('glowYellow');
+      glowApplied = 'glowYellow';
+      audioObj[2].play();
+      break;
     case 'blueGamePiece':
-    $(this).addClass('glowBlue');
-    glowApplied = 'glowBlue';
-    audioObj .blueSound.play();
-    break;
-  default:
-    break;
+      $(this).addClass('glowBlue');
+      glowApplied = 'glowBlue';
+      audioObj[3].play();
+      break;
+    default:
+      break;
   }
 
   console.log(event);
-  setTimeout(function(){
+  setTimeout(function () {
     $(event.target).removeClass(glowApplied);
   }, 800);
 }
@@ -86,11 +144,10 @@ $("#blueGamePiece").on('click', highlight);
 
 
 
-$("button").on("click",function(){
-  gameStarted ? gameStarted = false: gameStarted = true;
+$("button").on("click", function () {
+  gameStarted ? gameStarted = false : gameStarted = true;
   console.log("gameStared: ", gameStarted);
 })
-console.log(generateCompMoves(20));
 
 
 
@@ -417,4 +474,3 @@ console.log(generateCompMoves(20));
 //                                                   }
 // }
 // init();
-
