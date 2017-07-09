@@ -2,7 +2,7 @@ var $onOffSwitch = $("#myonoffswitch");
 var $playBtn = $(".playBtn");
 var $resetBtn = $(".resetBtn");
 var $gamePieces = $(".gameContainer").children();
-
+var $round = $(".round");
 //audio files are indexed the same as glow colors green ,red, yellow and blue
 var audioObj = [
   new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
@@ -15,8 +15,8 @@ var gameStats = {
   glowClasses: ['glowGreen', 'glowRed', 'glowYellow', 'glowBlue'],
   compMoves: [],
   playerMoves: [],
-  gameRound: 1,
-  strictMode: null,
+  round: 1,
+  strictMode: true,
   bestScore: 0,
   difficulty: 1,
   compTurn: true,
@@ -38,8 +38,12 @@ var generateCompMoves = function generateCompMoves(len) {
 
 var resetGame = function resetGame() {
   gameStats.playerMoves = [];
-  gameStats.gameRound = 0;
+  gameStats.round = 1;
   gameStats.compMoves = [];
+  gameStats.gameOn = false;
+  $round.text("0");
+  gameStats.compTurn = true;
+  console.log(gameStats);
 }
 
 var playSound = function(Index){
@@ -79,9 +83,66 @@ var initializeGame = function initGame() {
 var startGame = function startGame() {
   gameStats.gameOn = true;
   gameStats.compMoves = generateCompMoves(20);
-  playCompMoves(gameStats.compMoves, gameStats.gameRound);
+  playCompMoves(gameStats.compMoves, gameStats.round);
   gameStats.compTurn = false;
+  $round.text(gameStats.round);
 }
+
+var recordPlayerMove = function(index){
+  gameStats.playerMoves.push(index);
+}
+
+var checkPlayerMove = function checkPlayerMove(gameRound){
+  var compMoves = gameStats.compMoves.slice(0, gameRound);
+  var playerMoves = gameStats.playerMoves.slice(0, gameRound);
+  var noMatchCount = 0;
+  playerMoves.forEach(function(el, index){
+    if(el !== compMoves[index]){
+      noMatchCount += 1;
+    }
+  })
+
+  return noMatchCount  > 0 ? false : true;
+}
+ var gameInterval;
+  var overInterval;
+
+var gameOver = function gameOver() {
+  gameStats.compTurn = true;
+  gameInterval = setInterval(function () {
+    $round.text("Game");
+  }, 500);
+
+  overInterval = setInterval(function () {
+    $round.text('Over');
+  }, 1000);
+
+  setTimeout(function () {
+    clearInterval(gameInterval);
+    clearInterval(overInterval);
+    $round.text('0');
+  }, 3000)
+
+}
+
+
+$(".gameContainer").on('click', 'div', function(event){
+  if(!gameStats.compTurn){
+    event.stopPropagation();
+    var colorIndex = $(this).data('colorindex')
+    pressColor(colorIndex, 50, 400);
+    recordPlayerMove(colorIndex);
+
+    if(checkPlayerMove(gameStats.round)){
+      console.log("comp turn")
+    } else {
+      gameOver();
+    }
+    console.log(gameStats);
+
+  }
+
+});
 
 $playBtn.on('click', function(){
   console.log(gameStats);
@@ -91,37 +152,21 @@ $playBtn.on('click', function(){
   }
 });
 
-//capture users selection
-//check users sequence
-
+$resetBtn.on('click', resetGame);
 
 $onOffSwitch.on('click', function (event) {
-  console.log(gameStats);
+  console.log('before', gameStats);
   console.log('check', event.target.checked);
   if (gameStats.gameOn) {
     event.preventDefault();
   } else {
     gameStats.strictMode = event.target.checked;
   }
-});
-
-$(".gameContainer").on('click', 'div', function(event){
-  if(!gameStats.compTurn){
-    event.stopPropagation();
-    console.log($(this).data('colorindex'));
-    var colorIndex = $(this).data('colorindex')
-    pressColor(colorIndex, 50, 400);
-  }
+  console.log('after', gameStats);
 });
 
 initializeGame();
 
-
-
-// $("button").on("click", function () {
-//   gameStarted ? gameStarted = false : gameStarted = true;
-//   console.log("gameStared: ", gameStarted);
-// })
 
 
 
