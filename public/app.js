@@ -84,7 +84,7 @@ var $resetBtn = $(".resetBtn");
 var $gamePieces = $(".gameContainer").children();
 var $round = $(".round");
 //audio files are indexed the same as glow colors green ,red, yellow and blue
-var audioObj = [new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")];
+var audioObj = [new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"), new Audio('./sounds/gameover.mp3')];
 
 var gameStats = {
   glowClasses: ['glowGreen', 'glowRed', 'glowYellow', 'glowBlue'],
@@ -140,9 +140,10 @@ var playCompMoves = function playCompMoves(compMoves, gameRound) {
   console.log(compMoves);
   compMoves.forEach(function (el, index) {
     setTimeout(function () {
-      pressColor(el, 50, 400);
-    }, 450 * (index + 1));
+      pressColor(el, 50, 550);
+    }, 650 * (index + 1));
   });
+  gameStats.compTurn = false;
 };
 
 //run this when app launches to have all four pieces highlighted
@@ -151,7 +152,7 @@ var initializeGame = function initGame() {
     var moves = [0, 1, 2, 3];
     playCompMoves(moves, 4, gameStats.glowClasses);
   }, 1000);
-
+  gameStats.compTurn = true;
   //add a glowing backwards
 };
 
@@ -179,16 +180,19 @@ var checkPlayerMove = function checkPlayerMove(gameRound) {
 
   return noMatchCount > 0 ? false : true;
 };
-var gameInterval;
-var overInterval;
+
+var checkRoundComplete = function checkRoundComplete() {
+  return gameStats.round === gameStats.playerMoves.length;
+};
 
 var gameOver = function gameOver() {
   gameStats.compTurn = true;
-  gameInterval = setInterval(function () {
+  audioObj[4].play();
+  var gameInterval = setInterval(function () {
     $round.text("Game");
   }, 500);
 
-  overInterval = setInterval(function () {
+  var overInterval = setInterval(function () {
     $round.text('Over');
   }, 1000);
 
@@ -196,7 +200,25 @@ var gameOver = function gameOver() {
     clearInterval(gameInterval);
     clearInterval(overInterval);
     $round.text('0');
+    resetGame();
   }, 3000);
+};
+
+var tryAgain = function tryAgain() {
+  var tryInterval = setInterval(function () {
+    $round.text("Try");
+  }, 500);
+
+  var againInterval = setInterval(function () {
+    $round.text('Again');
+  }, 1000);
+
+  setTimeout(function () {
+    clearInterval(tryInterval);
+    clearInterval(againInterval);
+    $round.text(String(gameStats.round));
+    gameStats.playerMoves = [];
+  }, 2000);
 };
 
 $(".gameContainer").on('click', 'div', function (event) {
@@ -206,17 +228,28 @@ $(".gameContainer").on('click', 'div', function (event) {
     pressColor(colorIndex, 50, 400);
     recordPlayerMove(colorIndex);
 
-    if (checkPlayerMove(gameStats.round)) {
-      console.log("comp turn");
-    } else {
+    if (!checkPlayerMove(gameStats.round) && gameStats.strictMode) {
       gameOver();
+    } else if (!checkPlayerMove(gameStats.round) && !gameStats.strictMode) {
+      tryAgain();
+    } else if (checkRoundComplete()) {
+      gameStats.round += 1;
+      gameStats.playerMoves = [];
+      $round.text(gameStats.round);
+      gameStats.compTurn = true;
+      setTimeout(function () {
+        playCompMoves(gameStats.compMoves, gameStats.round);
+      }, 1000);
+
+      console.log(gameStats);
     }
-    console.log(gameStats);
   }
 });
 
+//when you play check if your move is valid
+//check if it is still your turn by matching against the round number
+
 $playBtn.on('click', function () {
-  console.log(gameStats);
   if (!gameStats.gameOn) {
     console.log('game is about to start');
     startGame();
