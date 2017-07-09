@@ -81,20 +81,21 @@ module.exports = __webpack_require__(2);
 var $onOffSwitch = $("#myonoffswitch");
 var $playBtn = $(".playBtn");
 var $resetBtn = $(".resetBtn");
+var $gamePieces = $(".gameContainer").children();
 
 //audio files are indexed the same as glow colors green ,red, yellow and blue
 var audioObj = [new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"), new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")];
 
-console.log(audioObj[0].play());
 var gameStats = {
   glowClasses: ['glowGreen', 'glowRed', 'glowYellow', 'glowBlue'],
   compMoves: [],
   playerMoves: [],
-  gameRound: 10,
-  strictMode: 0,
+  gameRound: 1,
+  strictMode: null,
   bestScore: 0,
   difficulty: 1,
-  compTurn: true
+  compTurn: true,
+  gameOn: false
 };
 
 var generateRandNum = function generateRandNum(min, max) {
@@ -105,15 +106,9 @@ var generateCompMoves = function generateCompMoves(len) {
   var results = [];
   var i = 0;
   for (; i < len; i++) {
-    results.push(generateRandNum(0, 4));
+    results.push(generateRandNum(0, 3));
   }
   return results;
-};
-
-var startGame = function startGame() {
-  //get computer moves
-  gameStats.compMoves = generateCompMoves(20);
-  //play index of comp move for current game round
 };
 
 var resetGame = function resetGame() {
@@ -122,20 +117,26 @@ var resetGame = function resetGame() {
   gameStats.compMoves = [];
 };
 
+var playSound = function playSound(Index) {
+  audioObj[Index].play();
+};
+
+var pressColor = function pressColor(colorIndex, soundTime, glowTime) {
+  $gamePieces.eq(colorIndex).addClass(gameStats.glowClasses[colorIndex]);
+  setTimeout(playSound.bind(null, colorIndex), soundTime);
+
+  setTimeout(function () {
+    $gamePieces.eq(colorIndex).removeClass(gameStats.glowClasses[colorIndex]);
+  }, glowTime);
+};
+
 //itterate through the array for a give
-var playCompMoves = function playCompMoves(compMoves, gameRound, glowClasses) {
-  var $gamePieces = $(".gameContainer").children();
+var playCompMoves = function playCompMoves(compMoves, gameRound) {
   var compMoves = compMoves.slice(0, gameRound);
   console.log(compMoves);
   compMoves.forEach(function (el, index) {
     setTimeout(function () {
-      $gamePieces.eq(el).addClass(glowClasses[el]);
-      setTimeout(function () {
-        audioObj[el].play();
-      }, 50);
-      setTimeout(function () {
-        $gamePieces.eq(el).removeClass(glowClasses[el]);
-      }, 400);
+      pressColor(el, 50, 400);
     }, 450 * (index + 1));
   });
 };
@@ -146,79 +147,55 @@ var initializeGame = function initGame() {
     var moves = [0, 1, 2, 3];
     playCompMoves(moves, 4, gameStats.glowClasses);
   }, 1000);
+
+  //add a glowing backwards
 };
 
-initializeGame();
+var startGame = function startGame() {
+  gameStats.gameOn = true;
+  gameStats.compMoves = generateCompMoves(20);
+  playCompMoves(gameStats.compMoves, gameStats.gameRound);
+  gameStats.compTurn = false;
+};
 
 $playBtn.on('click', function () {
-  playCompMoves();
+  console.log(gameStats);
+  if (!gameStats.gameOn) {
+    console.log('game is about to start');
+    startGame();
+  }
 });
 
 //capture users selection
 //check users sequence
 
-//check if user is on strict mode
-var strictModeStatus;
-var gameStarted = false;
 
 $onOffSwitch.on('click', function (event) {
-  if (gameStarted) {
+  console.log(gameStats);
+  console.log('check', event.target.checked);
+  if (gameStats.gameOn) {
     event.preventDefault();
   } else {
-    strictModeStatus = event.target.checked;
+    gameStats.strictMode = event.target.checked;
   }
-  // if(!status){
-  //   // event.preventDefault();
-  //   event.stopPropagation();
-  // }
-  // console.log($("#myonoffswitch").is(':checked'));
 });
 
-var highlight = function highlight(event) {
-  var colorHighlight = ['glowGreen', 'glowRed', 'glowYello', 'glowBlue'];
-  var glowApplied = void 0;
-  var gamePiece = event.target.id;
-  console.log(gamePiece);
-  switch (gamePiece) {
-    case 'greenGamePiece':
-      $(event.target).addClass('glowGreen');
-      glowApplied = 'glowGreen';
-      audioObj[0].play();
-      break;
-    case 'redGamePiece':
-      $(event.target).addClass('glowRed');
-      glowApplied = 'glowRed';
-      audioObj[1].play();
-      break;
-    case 'yellowGamePiece':
-      $(this).addClass('glowYellow');
-      glowApplied = 'glowYellow';
-      audioObj[2].play();
-      break;
-    case 'blueGamePiece':
-      $(this).addClass('glowBlue');
-      glowApplied = 'glowBlue';
-      audioObj[3].play();
-      break;
-    default:
-      break;
+$(".gameContainer").on('click', 'div', function (event) {
+  if (!gameStats.compTurn) {
+    event.stopPropagation();
+    console.log($(this).data('colorindex'));
+    var colorIndex = $(this).data('colorindex');
+    pressColor(colorIndex, 50, 400);
   }
-
-  console.log(event);
-  setTimeout(function () {
-    $(event.target).removeClass(glowApplied);
-  }, 800);
-};
-
-$("#greenGamePiece").on('click', highlight);
-$("#redGamePiece").on('click', highlight);
-$("#yellowGamePiece").on('click', highlight);
-$("#blueGamePiece").on('click', highlight);
-
-$("button").on("click", function () {
-  gameStarted ? gameStarted = false : gameStarted = true;
-  console.log("gameStared: ", gameStarted);
 });
+
+initializeGame();
+
+// $("button").on("click", function () {
+//   gameStarted ? gameStarted = false : gameStarted = true;
+//   console.log("gameStared: ", gameStarted);
+// })
+
 
 // function getClickPosition(e) {
 //     var xPosition = e.clientX;
@@ -542,6 +519,43 @@ $("button").on("click", function () {
 //                                                   }
 // }
 // init();
+
+
+// var highlight = function highlight(event) {
+//   let colorHighlight = ['glowGreen', 'glowRed', 'glowYello', 'glowBlue'];
+//   let glowApplied;
+//   var gamePiece = event.target.id;
+//   console.log(gamePiece);
+//   switch (gamePiece) {
+//     case 'greenGamePiece':
+//       $(event.target).addClass('glowGreen');
+//       glowApplied = 'glowGreen';
+//       audioObj[0].play();
+//       break;
+//     case 'redGamePiece':
+//       $(event.target).addClass('glowRed');
+//       glowApplied = 'glowRed';
+//       audioObj[1].play();
+//       break;
+//     case 'yellowGamePiece':
+//       $(this).addClass('glowYellow');
+//       glowApplied = 'glowYellow';
+//       audioObj[2].play();
+//       break;
+//     case 'blueGamePiece':
+//       $(this).addClass('glowBlue');
+//       glowApplied = 'glowBlue';
+//       audioObj[3].play();
+//       break;
+//     default:
+//       break;
+//   }
+
+//   console.log(event);
+//   setTimeout(function () {
+//     $(event.target).removeClass(glowApplied);
+//   }, 800);
+// }
 
 /***/ }),
 /* 2 */
