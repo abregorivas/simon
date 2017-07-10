@@ -1,0 +1,17 @@
+@mixin box-shadow-glow($h-size, $v-size, $spread, $color1, $color2) {
+    box-shadow:
+    $h-size $v-size $spread $color1,
+    $h-size $v-size $spread+10 $color1,
+    $h-size $v-size $spread+20 $color1,
+    $h-size $v-size $spread+30 $color2,
+    $h-size $v-size $spread+60 $color2,
+    $h-size $v-size $spread+70 $color2,
+    $h-size $v-size $spread+90 $color2,
+    $h-size $v-size $spread+140 $color2;
+}
+
+@mixin gamePieceSize() {
+    width: 0px;
+    height: 0px;
+    border: 200px solid transparent;
+}

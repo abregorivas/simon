@@ -4,17 +4,17 @@
   }
 
   to {
-    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #B6FF00, 0 0 35px #B6FF00, 0 0 40px #B6FF00, 0 0 50px #B6FF00, 0 0 75px #B6FF00;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #B6FF00, 0 0 70px #B6FF00, 0 0 80px #B6FF00, 0 0 100px #B6FF00, 0 0 150px #B6FF00;
   }
 }
 
 @keyframes glowRed {
   from {
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF0000, 0 0 70px #FF0000, 0 0 80px #FF0000, 0 0 100px #FF0000, 0 0 150px #FF0000;
   }
 
   to {
-    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF0000, 0 0 70px #FF0000, 0 0 80px #FF0000, 0 0 100px #FF0000, 0 0 150px #FF0000;
   }
 }
 
@@ -24,7 +24,7 @@
   }
 
   to {
-    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FFDD1B, 0 0 35px #FFDD1B, 0 0 40px #FFDD1B, 0 0 50px #FFDD1B, 20px 0 75px #FFDD1B;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FFDD1B, 0 0 70px #FFDD1B, 0 0 80px #FFDD1B, 0 0 100px #FFDD1B, 0 0 150px #FFDD1B;
   }
 }
 
@@ -34,15 +34,24 @@
   }
 
   to {
-    box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #228DFF, 0 0 35px #228DFF, 0 0 40px #228DFF, 0 0 50px #228DFF, 0 0 75px #228DFF;
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #228DFF, 0 0 70px #228DFF, 0 0 80px #228DFF, 0 0 100px #228DFF, 0 0 150px #228DFF;
   }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   background-color: #222222;
   background: repeating-linear-gradient(45deg, #2b2b2b 0%, #2b2b2b 10%, #222222 0%, #222222 50%) 0/15px 15px;
   font-size: 16px;
-  box-sizing: border-box;
 }
 
 .gameContainer {
@@ -51,7 +60,7 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 840px;
+  width: 850px;
   height: 840px;
   left: 50%;
   top: 50%;
@@ -68,7 +77,7 @@ body {
   border: 200px solid transparent;
   border-top-left-radius: 400px;
   background-color: #B6FF00;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
 }
 
 .glowGreen {
@@ -81,7 +90,7 @@ body {
   border: 200px solid transparent;
   border-top-right-radius: 400px;
   background-color: #FF0000;
-  margin-left: 10px;
+  margin: 0 0 10px 10px;
 }
 
 .glowRed {
@@ -93,8 +102,8 @@ body {
   height: 0px;
   border: 200px solid transparent;
   border-bottom-left-radius: 400px;
-  background-color: #FFFF00;
-  margin-right: 10px;
+  background-color: #FFDD1B;
+  margin: 10px 10px 0 0;
 }
 
 .glowYellow {
@@ -106,8 +115,8 @@ body {
   height: 0px;
   border: 200px solid transparent;
   border-bottom-right-radius: 400px;
-  background-color: #0000FF;
-  margin-left: 10px;
+  background-color: #228DFF;
+  margin: 10px 0 0 10px;
 }
 
 .glowBlue {
