@@ -51,7 +51,7 @@ module.exports =  {
       root: __dirname,
       verbose: true,
       dry: false,
-      exclude: ['sounds' ,   'index.html' ]
+      exclude: ['sounds' ,   'index.html', 'favicon.ico' ]
     }),
     new ExtractTextPlugin('[name].css'),
     new PurifyCSSPlugin({

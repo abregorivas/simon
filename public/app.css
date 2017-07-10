@@ -80,10 +80,6 @@ body {
   margin: 0 10px 10px 0;
 }
 
-.glowGreen {
-  animation: glowGreen .8s infinite;
-}
-
 #redGamePiece {
   width: 0px;
   height: 0px;
@@ -91,10 +87,6 @@ body {
   border-top-right-radius: 400px;
   background-color: #FF0000;
   margin: 0 0 10px 10px;
-}
-
-.glowRed {
-  animation: glowRed 1s infinite;
 }
 
 #yellowGamePiece {
@@ -106,10 +98,6 @@ body {
   margin: 10px 10px 0 0;
 }
 
-.glowYellow {
-  animation: glowYellow 1s infinite;
-}
-
 #blueGamePiece {
   width: 0px;
   height: 0px;
@@ -119,8 +107,20 @@ body {
   margin: 10px 0 0 10px;
 }
 
+.glowGreen {
+  animation: glowGreen .8s infinite;
+}
+
+.glowRed {
+  animation: glowRed .8s infinite;
+}
+
+.glowYellow {
+  animation: glowYellow .8s infinite;
+}
+
 .glowBlue {
-  animation: glowBlue 1s infinite;
+  animation: glowBlue .8s infinite;
 }
 
 .onoffswitch {
@@ -230,42 +230,44 @@ h2 {
 .playBtn,.resetBtn {
   outline: 0;
   border-radius: 50%;
-  background-color: yellow;
+  background-color: #FFFF00;
   width: 50px;
   height: 50px;
   display: block;
   border: 8px solid black;
   padding: 0;
   margin-left: 10px;
+  transition: 0.3s ease background-color;
+}
+
+.playBtn:hover,.resetBtn:hover {
+  border-color: white;
+  background-color: green;
 }
 
 .resetBtn {
   background-color: orange;
 }
 
+.resetBtn:hover {
+  border-color: white;
+  background-color: red;
+}
+
 .topSection {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
   align-items: center;
 }
 
-.bottomSection {
+.bottomSection,.topSection {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-around;
   width: 100%;
 }
 
-.bottomSection p {
+.bottomSection p,.topSection p {
   display: block;
   min-width: 100px;
   text-align: center;
-}
-
-.center {
-  height: 10px;
-  width: 10px;
-  background-color: white;
 }
 
 .round {
