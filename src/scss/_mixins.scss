@@ -13,5 +13,14 @@
 @mixin gamePieceSize() {
     width: 0px;
     height: 0px;
-    border: 200px solid transparent;
+    border: 150px solid transparent;
+      cursor: pointer;
+}
+
+@mixin centerContainer {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
 }

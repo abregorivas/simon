@@ -221,6 +221,7 @@ var gameOver = function gameOver() {
 };
 
 var tryAgain = function tryAgain() {
+  gameStats.compTurn = false;
   var tryInterval = setInterval(function () {
     $round.text("Try");
   }, 500);
