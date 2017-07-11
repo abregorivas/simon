@@ -61,15 +61,19 @@ var pressColor = function pressColor(colorIndex, soundTime, glowTime) {
 }
 
 
-var playCompMoves = function playCompMoves(compMoves, gameRound) {
+var playCompMoves = function playCompMoves(compMoves, gameRound, ) {
+  var glowSpeed = 500;
+  var moveSpeed = 600;
   var compMoves = compMoves.slice(0, gameRound);
   compMoves.forEach(function (el, index) {
     setTimeout(function () {
-      pressColor(el, 50, 550);
-    }, 650 * (index + 1));
+      pressColor(el, 50, glowSpeed*(1-(gameRound+1)/100));
+    }, (moveSpeed *(1-(gameRound+1)/100))* (index + 1));
   })
   gameStats.compTurn = false;
 }
+
+
 
 var playCompMovesReverse = function playCompMoves(compMoves, gameRound) {
   var compMoves = compMoves.slice(0, gameRound);

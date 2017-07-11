@@ -37,6 +37,15 @@
     }
 }
 
+@keyframes rotateGame {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 // ======RESET======
 * {
     box-sizing: border-box;
@@ -71,7 +80,11 @@ body {
     background-color: #393843;
     border-radius: 425px;
     padding: 10px;
+    transform-origin: 50% 50%;
+    animation: rotateGame 1.5s ease-out;
 }
+
+
 
 //======GAME PIECES======
 #greenGamePiece {
