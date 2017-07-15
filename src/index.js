@@ -1,18 +1,21 @@
-var $onOffSwitch = $("#myonoffswitch");
-var $playBtn = $(".playBtn");
-var $resetBtn = $(".resetBtn");
-var $gamePieces = $(".gameContainer").children();
-var $round = $(".round");
-//audio files are indexed the same as glow colors green ,red, yellow and blue
-var audioObj = [
-  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
-  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-  new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3"),
-  new Audio('./sounds/gameover.mp3')
-]
+import $ from 'jquery';
 
-var gameStats = {
+const $onOffSwitch = $('#myonoffswitch');
+const $playBtn = $('.playBtn');
+const $resetBtn = $('.resetBtn');
+const $gamePieces = $('.gameContainer').children();
+const $round = $('.round');
+
+// audio files are indexed the same as glow colors green ,red, yellow and blue
+const audioObj = [
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound3.mp3'),
+  new Audio('https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'),
+  new Audio('./sounds/gameover.mp3'),
+];
+
+const gameStats = {
   glowClasses: ['glowGreen', 'glowRed', 'glowYellow', 'glowBlue'],
   compMoves: [],
   playerMoves: [],
@@ -21,158 +24,152 @@ var gameStats = {
   bestScore: 0,
   difficulty: 1,
   compTurn: true,
-  gameOn: false
-}
+  gameOn: false,
+};
 
-var generateRandNum = function generateRandNum(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
+const generateRandNum = function generateRandNum(min, max) {
+  const limit = (max - min) + 1;
+  return Math.floor(Math.random() * (limit + min));
+};
 
-var generateCompMoves = function generateCompMoves(len) {
-  let results = [];
+const generateCompMoves = function generateCompMoves(len) {
+  const results = [];
   let i = 0;
-  for (; i < len; i++) {
+  for (; i < len; i += 1) {
     results.push(generateRandNum(0, 3));
   }
   return results;
-}
+};
 
-var resetGame = function resetGame() {
+const resetGame = function resetGame() {
   gameStats.playerMoves = [];
   gameStats.round = 1;
   gameStats.compMoves = [];
   gameStats.gameOn = false;
-  $round.text("0");
+  $round.html('<span>Round</span> 0');
   gameStats.compTurn = true;
-  console.log(gameStats);
-}
+};
 
-var playSound = function (Index) {
+const playSound = function playSound(Index) {
   audioObj[Index].play();
-}
+};
 
-var pressColor = function pressColor(colorIndex, soundTime, glowTime) {
+const pressColor = function pressColor(colorIndex, soundTime, glowTime) {
   $gamePieces.eq(colorIndex).addClass(gameStats.glowClasses[colorIndex]);
   setTimeout(playSound.bind(null, colorIndex), soundTime);
 
-  setTimeout(function () {
+  setTimeout(() => {
     $gamePieces.eq(colorIndex).removeClass(gameStats.glowClasses[colorIndex]);
   }, glowTime);
-}
+};
 
-
-var playCompMoves = function playCompMoves(compMoves, gameRound, ) {
-  var glowSpeed = 500;
-  var moveSpeed = 600;
-  var compMoves = compMoves.slice(0, gameRound);
-  compMoves.forEach(function (el, index) {
-    setTimeout(function () {
-      pressColor(el, 50, glowSpeed*(1-(gameRound+1)/100));
-    }, (moveSpeed *(1-(gameRound+1)/100))* (index + 1));
-  })
+const playCompMoves = function playCompMoves(compMoves, gameRound) {
+  const glowSpeed = 500;
+  const moveSpeed = 600;
+  const glowSpeedPct = 1 - (gameRound / 100);
+  const glowTime = glowSpeed * glowSpeedPct;
+  const cpuMoves = compMoves.slice(0, gameRound);
+  cpuMoves.forEach((el, index) => {
+    setTimeout(() => {
+      pressColor(el, 50, glowTime);
+      sound.pause();
+      sound.currentTime = 0;
+    }, (moveSpeed * glowSpeedPct) * (index + 1));
+  });
   gameStats.compTurn = false;
-}
+};
 
-
-
-var playCompMovesReverse = function playCompMoves(compMoves, gameRound) {
-  var compMoves = compMoves.slice(0, gameRound);
-  compMoves.forEach(function (el, index) {
-    setTimeout(function () {
+const playCompMovesReverse = function playCompMovesReverse(compMoves, gameRound) {
+  const cpuMovesReverse = compMoves.slice(0, gameRound);
+  cpuMovesReverse.forEach((el, index) => {
+    setTimeout(() => {
       pressColor(el, 10, 100);
     }, 200 * (index + 1));
-  })
+  });
   gameStats.compTurn = true;
-}
+};
 
-//run this when app launches to have all four pieces highlighted
-var initializeGame = function initGame() {
+// run this when app launches to have all four pieces highlighted
+const initializeGame = function initGame() {
+  const moves = [0, 1, 2, 3];
+  setTimeout(() => {
+    playCompMoves(moves, 4, gameStats.glowClasses);
+  }, 1000);
 
-  setTimeout(function () {
-    var moves = [0, 1, 2, 3];
-    playCompMoves(moves, 4, gameStats.glowClasses)
-  }, 1000)
+  setTimeout(() => {
+    playCompMovesReverse(moves, 4, gameStats.glowClasses);
+  }, 4000);
+};
 
-  setTimeout(function () {
-    var moves = [0, 1, 2, 3 ];
-    playCompMovesReverse(moves, 4, gameStats.glowClasses)
-  }, 4000)
-
-  console.log(gameStats)
-  //add a glowing backwards
-}
-
-var startGame = function startGame() {
+const startGame = function startGame() {
   gameStats.gameOn = true;
   gameStats.compMoves = generateCompMoves(20);
   playCompMoves(gameStats.compMoves, gameStats.round);
   gameStats.compTurn = false;
-  $round.text(gameStats.round);
-}
+  $round.html(`<span>Round</span> ${gameStats.round}`);
+};
 
-var recordPlayerMove = function (index) {
+const recordPlayerMove = function recordPlayerMove(index) {
   gameStats.playerMoves.push(index);
-}
+};
 
-var checkPlayerMove = function checkPlayerMove(gameRound) {
-  var compMoves = gameStats.compMoves.slice(0, gameRound);
-  var playerMoves = gameStats.playerMoves.slice(0, gameRound);
-  var noMatchCount = 0;
-  playerMoves.forEach(function (el, index) {
+const checkPlayerMove = function checkPlayerMove(gameRound) {
+  const compMoves = gameStats.compMoves.slice(0, gameRound);
+  const playerMoves = gameStats.playerMoves.slice(0, gameRound);
+  let noMatchCount = 0;
+  playerMoves.forEach((el, index) => {
     if (el !== compMoves[index]) {
       noMatchCount += 1;
     }
-  })
-  return noMatchCount > 0 ? false : true;
-}
+  });
+  return !(noMatchCount > 0);
+};
 
-var checkRoundComplete = function checkRoundComplete() {
+const checkRoundComplete = function checkRoundComplete() {
   return gameStats.round === gameStats.playerMoves.length;
-}
+};
 
-var gameOver = function gameOver() {
+const gameOver = function gameOver() {
   gameStats.compTurn = true;
   audioObj[4].play();
-  var gameInterval = setInterval(function () {
-    $round.text("Game");
+  const gameInterval = setInterval(() => {
+    $round.html('<span>Round</span> Game');
   }, 500);
 
-  var overInterval = setInterval(function () {
-    $round.text('Over');
+  const overInterval = setInterval(() => {
+    $round.html('<span>Round</span> Over');
   }, 1000);
 
-  setTimeout(function () {
+  setTimeout(() => {
     clearInterval(gameInterval);
     clearInterval(overInterval);
-    $round.text('0');
+    $round.html(`<span>Round</span> ${gameStats.round}`);
     resetGame();
-  }, 3000)
+  }, 3000);
+};
 
-}
-
-var tryAgain = function tryAgain() {
+const tryAgain = function tryAgain() {
   gameStats.compTurn = false;
-  var tryInterval = setInterval(function () {
-    $round.text("Try");
+  const tryInterval = setInterval(() => {
+    $round.html('<span>Round</span> Try');
   }, 500);
 
-  var againInterval = setInterval(function () {
-    $round.text('Again');
+  const againInterval = setInterval(() => {
+    $round.html('<span>Round</span> Again');
   }, 1000);
 
-  setTimeout(function () {
+  setTimeout(() => {
     clearInterval(tryInterval);
     clearInterval(againInterval);
-    $round.text(String(gameStats.round));
+    $round.html(`<span>Round</span> ${gameStats.round}`);
     gameStats.playerMoves = [];
-  }, 2000)
-}
+  }, 2000);
+};
 
-$(".gameContainer").on('click', 'div', function (event) {
-  console.log(gameStats);
+$('.gameContainer').on('click', 'div', function gameContainer(event) {
   if (!gameStats.compTurn) {
     event.stopPropagation();
-    var colorIndex = $(this).data('colorindex')
+    const colorIndex = $(this).data('colorindex');
     pressColor(colorIndex, 50, 400);
     recordPlayerMove(colorIndex);
 
@@ -185,16 +182,14 @@ $(".gameContainer").on('click', 'div', function (event) {
       gameStats.playerMoves = [];
       $round.text(gameStats.round);
       gameStats.compTurn = true;
-      setTimeout(function () {
+      setTimeout(() => {
         playCompMoves(gameStats.compMoves, gameStats.round);
-      }, 1000)
-
-      console.log(gameStats);
+      }, 1000);
     }
   }
 });
 
-$playBtn.on('click', function () {
+$playBtn.on('click', () => {
   if (!gameStats.gameOn) {
     startGame();
   }
@@ -202,7 +197,7 @@ $playBtn.on('click', function () {
 
 $resetBtn.on('click', resetGame);
 
-$onOffSwitch.on('click', function (event) {
+$onOffSwitch.on('click', (event) => {
   if (gameStats.gameOn) {
     event.preventDefault();
   } else {

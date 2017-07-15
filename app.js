@@ -1,23 +1,23 @@
 // Drawing the game board
-window.onload = function() {
+window.onload = function () {
   gameSize = 0;
-  if(window.innerWidth > 1024) {
+  if (window.innerWidth > 1024) {
     gameSize = windowSizingObj.large;
-  } else if(window.innerWidth > 768) {
+  } else if (window.innerWidth > 768) {
     gameSize = windowSizingObj.medium;
-  } else if(window.innerWidth > 450) {
+  } else if (window.innerWidth > 450) {
     gameSize = windowSizingObj.small;
   } else {
     gameSize = windowSizingObj.xSmall;
   }
 
-  greyRadius = gameSize/4;
+  greyRadius = gameSize / 4;
   console.log(gameSize);
 
-   $("#canvas1").attr({"width": gameSize, "height": gameSize});
-   $("#canvas2").attr({"width": gameSize, "height": gameSize});
-   $("#canvas3").attr({"width": gameSize, "height": gameSize});
-   $("#canvas4").attr({"width": gameSize, "height": gameSize});
+  $('#canvas1').attr({ 'width': gameSize, 'height': gameSize });
+  $('#canvas2').attr({ 'width': gameSize, 'height': gameSize });
+  $('#canvas3').attr({ width: gameSize, height: gameSize });
+  $('#canvas4').attr({ width: gameSize, 'height': gameSize });
 
 
   console.log(greyRadius);
@@ -35,37 +35,37 @@ var windowSizingObj = {
   large: 500,
   medium: 400,
   small: 250,
-  xSmall: 100
+  xSmall: 100,
 };
-var w = window.innerWidth;
-console.log("WindowWidth" + w );
+let w = window.innerWidth;
+console.log('WindowWidth' + w);
 
 var drawingObj = {
   canvas1: document.getElementById('canvas1'),
   canvas2: document.getElementById('canvas2'),
   canvas3: document.getElementById('canvas3'),
   canvas4: document.getElementById('canvas4'),
-  context1: canvas1.getContext("2d"),
-  context2: canvas2.getContext("2d"),
-  context3: canvas3.getContext("2d"),
-  context4: canvas4.getContext("2d"),
-  drawSection: function(section, color, xCord, yCord, radius) {
+  context1: canvas1.getContext('2d'),
+  context2: canvas2.getContext('2d'),
+  context3: canvas3.getContext('2d'),
+  context4: canvas4.getContext('2d'),
+  drawSection(section, color, xCord, yCord, radius) {
     section.beginPath();
     section.fillStyle = color;
     section.arc(xCord, yCord, radius, 0, 2.5 * Math.PI);
     section.fill();
-  }
+  },
 };
 
 var gameFunctions = {
-  startGame: function() {
+  startGame() {
     gameFunctions.generateCompMoves();
     gameStats.round += 1;
     gameStats.gameStarted = true;
     compPlay = setInterval(increaseIndex, 800);
     $(this).off();
   },
-  resetGame: function() {
+  resetGame() {
     clearInterval(compPlay);
     gameStats.winner ? clearInterval(win1) : 0;
     gameStats.winner ? clearInterval(win2) : 0;
@@ -80,13 +80,13 @@ var gameFunctions = {
     $("#score").text(0).css("color", "white");
     $("#start").on('click', gameFunctions.startGame);
   },
-  alertWin1: function() {
+  alertWin1() {
     $("#score").text("WIN").css("color", "green");
   },
-  alertWin2: function() {
+  alertWin2() {
     $("#score").text("WIN").css("color", "white");
   },
-  playCompMoves: function() {
+  playCompMoves() {
     if (gameStats.round == 2) {
       gameStats.winner = true;
       win1 = setInterval(gameFunctions.alertWin1, 500);
@@ -96,14 +96,14 @@ var gameFunctions = {
       compPlay = setInterval(increaseIndex, 800);
     }
   },
-  replayLastCompMoves: function() {
+  replayLastCompMoves() {
     compPlay = setInterval(increaseIndex, 800);
   },
-  updatePlayerMove: function(indexPlayed) {
+  updatePlayerMove(indexPlayed) {
     gameStats.playerMoves.push(indexPlayed);
     gameStats.playerIndex += 1;
   },
-  checkPlayerMove: function() {
+  checkPlayerMove() {
     if (gameStats.strictMode) {
       gameFunctions.strictModeCheckPlayerMove();
     } else {
@@ -125,7 +125,7 @@ var gameFunctions = {
       }
     }
   },
-  strictModeCheckPlayerMove: function() {
+  strictModeCheckPlayerMove() {
     if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
       $("#score").text("Lose").css("color", "red");
       setTimeout(gameFunctions.resetGame, 1000);
@@ -137,48 +137,48 @@ var gameFunctions = {
       gameFunctions.playCompMoves();
     }
   },
-  generateCompMoves: function() {
+  generateCompMoves() {
     for (var i = 0; i < 2; i++) {
       gameStats.compMoves.push(Math.floor(Math.random() * 4));
     }
-  }
+  },
 };
 
 var eventTriggers = {
-  $startGame: $("#start").on('click', gameFunctions.startGame),
-  $reset: $("#reset").on('click', gameFunctions.resetGame),
-  $strictMode: $("#strictChk").on('click', function() {
+  $startGame: $('#start').on('click', gameFunctions.startGame),
+  $reset: $('#reset').on('click', gameFunctions.resetGame),
+  $strictMode: $('#strictChk').on('click', function () {
     if (!gameStats.strictMode) {
-      $(this).text("\u2713" + " Strict");
+      $(this).text('\u2713' + ' Strict');
       gameStats.strictMode = true;
     } else {
-      $(this).text("Strict");
+      $(this).text('Strict');
       gameStats.strictMode = false;
     }
   }),
-  $enablePressing: function() {
+  $enablePressing() {
     $("#canvas1").on('click', pressColor.red);
     $("#canvas2").on('click', pressColor.blue);
     $("#canvas3").on('click', pressColor.yellow);
     $("#canvas4").on('click', pressColor.green);
   },
-  $disablePressing: function() {
+  $disablePressing() {
     $("#canvas1").off();
     $("#canvas2").off();
     $("#canvas3").off();
     $("#canvas4").off();
-  }
+  },
 };
 
-var audioObj = {
-  redSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3"),
-  blueSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3"),
-  yellowSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3"),
-  greenSound: new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3")
+let audioObj = {
+  redSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'),
+  blueSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3'),
+  yellowSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound3.mp3'),
+  greenSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound4.mp3'),
 };
 
 var pressColor = {
-  red: function() {
+  red() {
     audioObj.redSound.play();
     drawingObj.drawSection(drawingObj.context1, '#FF4F4F', gameSize, gameSize, gameSize);
     drawingObj.drawSection(drawingObj.context1, '#333', gameSize, gameSize, greyRadius);
@@ -199,7 +199,7 @@ var pressColor = {
       gameFunctions.checkPlayerMove();
     }
   },
-  blue: function() {
+  blue() {
     audioObj.blueSound.play();
     drawingObj.drawSection(drawingObj.context2, '#4F4FFF', 0, gameSize, gameSize);
     drawingObj.drawSection(drawingObj.context2, '#333', 0, gameSize, greyRadius);
@@ -220,7 +220,7 @@ var pressColor = {
       gameFunctions.checkPlayerMove();
     }
   },
-  yellow: function() {
+  yellow() {
     audioObj.yellowSound.play();
     drawingObj.drawSection(drawingObj.context3, '#FFFF7F', gameSize, 0, gameSize);
     drawingObj.drawSection(drawingObj.context3, '#333', gameSize, 0, greyRadius);
@@ -241,7 +241,7 @@ var pressColor = {
       gameFunctions.checkPlayerMove();
     }
   },
-  green: function() {
+  green() {
     audioObj.greenSound.play();
     drawingObj.drawSection(drawingObj.context4, '#408040', 0, 0, gameSize);
     drawingObj.drawSection(drawingObj.context4, '#333', 0, 0, greyRadius);
@@ -261,7 +261,7 @@ var pressColor = {
       gameFunctions.updatePlayerMove(moveIndex);
       gameFunctions.checkPlayerMove();
     }
-  }
+  },
 };
 
 var gameStats = {
@@ -272,14 +272,14 @@ var gameStats = {
   playerMoves: [],
   compIndex: -1,
   playerIndex: -1,
-  winner: false
+  winner: false,
 };
 
 
-//runs through the appropriate number of indices to be played on each turn of the computer
+// runs through the appropriate number of indices to be played on each turn of the computer
 function increaseIndex() {
   ++gameStats.compIndex;
-  $("#score").text(gameStats.round).css("color", "white");
+  $('#score').text(gameStats.round).css('color', 'white');
   if (gameStats.compIndex >= gameStats.round) {
     gameStats.compIndex = -1;
     clearInterval(compPlay);
@@ -299,5 +299,5 @@ function increaseIndex() {
     case 3:
       pressColor.green();
       break;
-                                                  }
+  }
 }
