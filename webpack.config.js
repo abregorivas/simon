@@ -5,6 +5,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const glob = require('glob');
 const PurifyCSSPlugin = require('purifycss-webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports =  {
   entry: {
@@ -24,7 +25,7 @@ module.exports =  {
         test: /\.s[ac]ss$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'sass-loader']
+          use: ['css-loader', 'sass-loader', 'postcss-loader']
         })
       },
       {
@@ -62,7 +63,12 @@ module.exports =  {
 }
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: inProduction
+      options: {
+        minimize: inProduction,
+        postcss: [
+          autoprefixer(),
+        ],
+      },
     })
   ]
 };

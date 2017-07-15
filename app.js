@@ -14,10 +14,10 @@ window.onload = function () {
   greyRadius = gameSize / 4;
   console.log(gameSize);
 
-  $('#canvas1').attr({ 'width': gameSize, 'height': gameSize });
-  $('#canvas2').attr({ 'width': gameSize, 'height': gameSize });
+  $('#canvas1').attr({ width: gameSize, height: gameSize });
+  $('#canvas2').attr({ width: gameSize, height: gameSize });
   $('#canvas3').attr({ width: gameSize, height: gameSize });
-  $('#canvas4').attr({ width: gameSize, 'height': gameSize });
+  $('#canvas4').attr({ width: gameSize, height: gameSize });
 
 
   console.log(greyRadius);
@@ -37,8 +37,8 @@ var windowSizingObj = {
   small: 250,
   xSmall: 100,
 };
-let w = window.innerWidth;
-console.log('WindowWidth' + w);
+const w = window.innerWidth;
+console.log(`WindowWidth${  w}`);
 
 var drawingObj = {
   canvas1: document.getElementById('canvas1'),
@@ -77,14 +77,14 @@ var gameFunctions = {
     gameStats.compIndex = -1;
     gameStats.playerIndex = -1;
     gameStats.gameStarted = false;
-    $("#score").text(0).css("color", "white");
-    $("#start").on('click', gameFunctions.startGame);
+    $('#score').text(0).css('color', 'white');
+    $('#start').on('click', gameFunctions.startGame);
   },
   alertWin1() {
-    $("#score").text("WIN").css("color", "green");
+    $('#score').text('WIN').css('color', 'green');
   },
   alertWin2() {
-    $("#score").text("WIN").css("color", "white");
+    $('#score').text('WIN').css('color', 'white');
   },
   playCompMoves() {
     if (gameStats.round == 2) {
@@ -112,7 +112,7 @@ var gameFunctions = {
         gameStats.playerTurn = false;
         gameStats.playerIndex = -1;
         gameStats.playerMoves = [];
-        $("#score").text("!!").css("color", "red");
+        $('#score').text('!!').css('color', 'red');
         setTimeout(gameFunctions.replayLastCompMoves, 500);
       }
 
@@ -127,7 +127,7 @@ var gameFunctions = {
   },
   strictModeCheckPlayerMove() {
     if (gameStats.playerMoves[gameStats.playerIndex] != gameStats.compMoves[gameStats.playerIndex]) {
-      $("#score").text("Lose").css("color", "red");
+      $('#score').text('Lose').css('color', 'red');
       setTimeout(gameFunctions.resetGame, 1000);
     } else if (gameStats.round == gameStats.playerMoves.length) {
       eventTriggers.$disablePressing();
@@ -138,7 +138,7 @@ var gameFunctions = {
     }
   },
   generateCompMoves() {
-    for (var i = 0; i < 2; i++) {
+    for (let i = 0; i < 2; i++) {
       gameStats.compMoves.push(Math.floor(Math.random() * 4));
     }
   },
@@ -157,20 +157,20 @@ var eventTriggers = {
     }
   }),
   $enablePressing() {
-    $("#canvas1").on('click', pressColor.red);
-    $("#canvas2").on('click', pressColor.blue);
-    $("#canvas3").on('click', pressColor.yellow);
-    $("#canvas4").on('click', pressColor.green);
+    $('#canvas1').on('click', pressColor.red);
+    $('#canvas2').on('click', pressColor.blue);
+    $('#canvas3').on('click', pressColor.yellow);
+    $('#canvas4').on('click', pressColor.green);
   },
   $disablePressing() {
-    $("#canvas1").off();
-    $("#canvas2").off();
-    $("#canvas3").off();
-    $("#canvas4").off();
+    $('#canvas1').off();
+    $('#canvas2').off();
+    $('#canvas3').off();
+    $('#canvas4').off();
   },
 };
 
-let audioObj = {
+const audioObj = {
   redSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'),
   blueSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound2.mp3'),
   yellowSound: new Audio('https://s3.amazonaws.com/freecodecamp/simonSound3.mp3'),
@@ -182,7 +182,7 @@ var pressColor = {
     audioObj.redSound.play();
     drawingObj.drawSection(drawingObj.context1, '#FF4F4F', gameSize, gameSize, gameSize);
     drawingObj.drawSection(drawingObj.context1, '#333', gameSize, gameSize, greyRadius);
-    setTimeout(function() {
+    setTimeout(() => {
       drawingObj.context1.beginPath();
       drawingObj.context1.fillStyle = "red";
       drawingObj.context1.arc(gameSize, gameSize, gameSize, 0, 2.5 * Math.PI);
@@ -194,7 +194,7 @@ var pressColor = {
     }, 500);
 
     if (gameStats.playerTurn) {
-      var moveIndex = $(this).attr('value');
+      let moveIndex = $(this).attr('value');
       gameFunctions.updatePlayerMove(moveIndex);
       gameFunctions.checkPlayerMove();
     }
@@ -203,7 +203,7 @@ var pressColor = {
     audioObj.blueSound.play();
     drawingObj.drawSection(drawingObj.context2, '#4F4FFF', 0, gameSize, gameSize);
     drawingObj.drawSection(drawingObj.context2, '#333', 0, gameSize, greyRadius);
-    setTimeout(function() {
+    setTimeout(() => {
       drawingObj.context2.beginPath();
       drawingObj.context2.fillStyle = "blue";
       drawingObj.context2.arc(0, gameSize, gameSize, 0, 2.5 * Math.PI);
@@ -215,7 +215,7 @@ var pressColor = {
     }, 500);
 
     if (gameStats.playerTurn) {
-      var moveIndex = $(this).attr('value');
+      let moveIndex = $(this).attr('value');
       gameFunctions.updatePlayerMove(moveIndex);
       gameFunctions.checkPlayerMove();
     }
@@ -224,7 +224,7 @@ var pressColor = {
     audioObj.yellowSound.play();
     drawingObj.drawSection(drawingObj.context3, '#FFFF7F', gameSize, 0, gameSize);
     drawingObj.drawSection(drawingObj.context3, '#333', gameSize, 0, greyRadius);
-    setTimeout(function() {
+    setTimeout(() => {
       drawingObj.context3.beginPath();
       drawingObj.context3.fillStyle = "yellow";
       drawingObj.context3.arc(gameSize, 0, gameSize, 0, 2.5 * Math.PI);
@@ -236,7 +236,7 @@ var pressColor = {
     }, 500);
 
     if (gameStats.playerTurn) {
-      var moveIndex = $(this).attr('value');
+      let moveIndex = $(this).attr('value');
       gameFunctions.updatePlayerMove(moveIndex);
       gameFunctions.checkPlayerMove();
     }
@@ -245,7 +245,7 @@ var pressColor = {
     audioObj.greenSound.play();
     drawingObj.drawSection(drawingObj.context4, '#408040', 0, 0, gameSize);
     drawingObj.drawSection(drawingObj.context4, '#333', 0, 0, greyRadius);
-    setTimeout(function() {
+    setTimeout(() => {
       drawingObj.context4.beginPath();
       drawingObj.context4.fillStyle = "green";
       drawingObj.context4.arc(0, 0, gameSize, 0, 2.5 * Math.PI);
@@ -257,7 +257,7 @@ var pressColor = {
     }, 300);
 
     if (gameStats.playerTurn) {
-      var moveIndex = $(this).attr('value');
+      let moveIndex = $(this).attr('value');
       gameFunctions.updatePlayerMove(moveIndex);
       gameFunctions.checkPlayerMove();
     }
