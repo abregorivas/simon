@@ -1,6 +1,4 @@
 node_modules
+public
 .DS_Store
 npm-debug.log.*
-draft.md
-notes.txt
-public
