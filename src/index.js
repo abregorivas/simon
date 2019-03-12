@@ -1,26 +1,27 @@
 import $ from 'jquery'
 require('./scss/main.scss')
 
+
 const $onOffSwitch = $('#myonoffswitch')
 const $playBtn = $('.playBtn')
 const $resetBtn = $('.resetBtn')
 const $gamePieces = $('.gameContainer').children()
-const $round = $('.round')
+const $round = $('.round span:last-child')
 
 let greenSound = document.createElement('audio')
-greenSound.src = '../public/sounds/simonSound1.mp3'
+greenSound.src = './sounds/simonSound1.mp3'
 
 let redSound = document.createElement('audio')
-redSound.src = '../public/sounds/simonSound2.mp3'
+redSound.src = './sounds/simonSound2.mp3'
 
 let yellowSound = document.createElement('audio')
-yellowSound.src = '../public/sounds/simonSound3.mp3'
+yellowSound.src = './sounds/simonSound3.mp3'
 
 let blueSound = document.createElement('audio')
-blueSound.src = '../public/sounds/simonSound4.mp3'
+blueSound.src = './sounds/simonSound4.mp3'
 
 let gameOverSound = document.createElement('audio')
-gameOverSound.src = '../public/sounds/gameover.mp3'
+gameOverSound.src = './sounds/gameover.mp3'
 
 const audioObj = [
   greenSound,
@@ -61,8 +62,8 @@ const resetGame = function resetGame () {
   gameStats.round = 1
   gameStats.compMoves = []
   gameStats.gameOn = false
-  $round.html('<span>Round</span> 0')
   gameStats.compTurn = true
+  $round.html("0")
 }
 
 const playSound = function playSound (Index) {
@@ -107,7 +108,7 @@ const startGame = function startGame () {
   gameStats.compMoves = generateCompMoves(20)
   playCompMoves(gameStats.compMoves, gameStats.round)
   gameStats.compTurn = false
-  $round.html(`<span>Round</span> ${gameStats.round}`)
+  $round.html(`${gameStats.round}`)
 }
 
 const recordPlayerMove = function recordPlayerMove (index) {
@@ -134,17 +135,17 @@ const gameOver = function gameOver () {
   gameStats.compTurn = true
   audioObj[4].play()
   const gameInterval = setInterval(() => {
-    $round.html('<span>Round</span> Game')
+    $round.html('Game')
   }, 500)
 
   const overInterval = setInterval(() => {
-    $round.html('<span>Round</span> Over')
+    $round.html('Over')
   }, 1000)
 
   setTimeout(() => {
     clearInterval(gameInterval)
     clearInterval(overInterval)
-    $round.html(`<span>Round</span> ${gameStats.round}`)
+    $round.html(`---`)
     resetGame()
   }, 3000)
 }
@@ -152,17 +153,17 @@ const gameOver = function gameOver () {
 const tryAgain = function tryAgain () {
   gameStats.compTurn = false
   const tryInterval = setInterval(() => {
-    $round.html('<span>Round</span> Try')
+    $round.html('Try')
   }, 500)
 
   const againInterval = setInterval(() => {
-    $round.html('<span>Round</span> Again')
+    $round.html('Again')
   }, 1000)
 
   setTimeout(() => {
     clearInterval(tryInterval)
     clearInterval(againInterval)
-    $round.html(`<span>Round</span> ${gameStats.round}`)
+    $round.html(`${gameStats.round}`)
     gameStats.playerMoves = []
   }, 2000)
 }
