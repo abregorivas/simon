@@ -1,279 +1,355 @@
-@import 'mixins';
-@import 'variables';
-
+@import "mixins";
+@import "variables";
+// ====== KEY FRAME ANIMATIONS ======
 @keyframes glowGreen {
-    from {
-        @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
-    }
-    to {
-        @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
-    }
+  from {
+    @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
+  }
+  to {
+    @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
+  }
 }
 
 @keyframes glowRed {
-    from {
-        @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
-    }
-    to {
-        @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
-    }
+  from {
+    @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
+  }
+  to {
+    @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
+  }
 }
 
 @keyframes glowYellow {
-    from {
-        @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
-    }
-    to {
-        @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
-    }
+  from {
+    @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
+  }
+  to {
+    @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
+  }
 }
 
 @keyframes glowBlue {
-    from {
-        @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
-    }
-    to {
-        @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
-    }
+  from {
+    @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
+  }
+  to {
+    @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
+  }
 }
 
 @keyframes rotateGame {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-// ======RESET======
-
-html {
-    overflow-y: scroll;
-    margin: 0;
-    padding: 0;
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 //=====BASE STYLES======
-body {
-    font-family: 'Russo One', sans-serif;
-    font-size: 16px;
-    background: repeating-linear-gradient(45deg, #2b2b2b 0%, #2b2b2b 10%, #222222 0%, #222222 50%) 0 / 15px 15px;
+:root {
+  font-size: 16px;
 }
 
-//====GAME
+body {
+  font-family: "Russo One", sans-serif;
+  background: repeating-linear-gradient(45deg, #2b2b2b 0%, #2b2b2b 10%, #222222 0%, #222222 50%) 0 /
+    20px 20px;
+}
+
+//====GAME COMTAINER ======
 .gameContainer {
-    position: absolute;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    width: 620px;
-    height: 620px;
-    @include centerContainer();
-    background-color: #393843;
-    border-radius: 400px;
-    padding: 10px;
-    transform-origin: 50% 50%;
-    animation: rotateGame 1.5s ease-out;
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 620px;
+  height: 620px;
+  @include centerContainer();
+  background-color: #393843;
+  border-radius: 400px;
+  padding: 10px;
+  transform-origin: 50% 50%;
+  animation: rotateGame 1.6s cubic-bezier(0.17, 0.89, 0.32, 2.08);
 }
 
 //======GAME PIECES======
 #greenGamePiece {
-    @include gamePieceSize();
-    border-top-left-radius: 300px;
-    background-color: $green-piece-color;
-    margin: 0 5px 5px 0;
+  @include gamePieceSize();
+  border-top-left-radius: 300px;
+  background-color: $green-piece-color;
+  margin: 0 5px 5px 0;
 }
 
 #redGamePiece {
-    @include gamePieceSize();
-    border-top-right-radius: 300px;
-    background-color: $red-piece-color;
-    margin: 0 0 5px 5px;
+  @include gamePieceSize();
+  border-top-right-radius: 300px;
+  background-color: $red-piece-color;
+  margin: 0 0 5px 5px;
 }
 
 #yellowGamePiece {
-    @include gamePieceSize();
-    border-bottom-left-radius: 300px;
-    background-color: $yellow-piece-color;
-    margin: 5px 5px 0 0;
+  @include gamePieceSize();
+  border-bottom-left-radius: 300px;
+  background-color: $yellow-piece-color;
+  margin: 5px 5px 0 0;
 }
 
 #blueGamePiece {
-    @include gamePieceSize();
-    border-bottom-right-radius: 300px;
-    background-color: $blue-piece-color;
-    margin: 5px 0 0 5px;
+  @include gamePieceSize();
+  border-bottom-right-radius: 300px;
+  background-color: $blue-piece-color;
+  margin: 5px 0 0 5px;
 }
-//
+
 //======GLOW STYLES======
 .glowGreen {
-    animation: glowGreen .8s infinite;
+  animation: glowGreen 0.8s infinite;
 }
 
 .glowRed {
-    animation: glowRed .8s infinite;
+  animation: glowRed 0.8s infinite;
 }
+
 .glowYellow {
-    animation: glowYellow .8s infinite;
+  animation: glowYellow 0.8s infinite;
 }
 
 .glowBlue {
-    animation: glowBlue .8s infinite;
+  animation: glowBlue 0.8s infinite;
 }
 
 //======STRICT MODE======
 .onoffswitch {
-    position: relative;
-    max-width: 90px;
-    display: flex;
-    align-items: center;
+  position: relative;
+  max-width: 90px;
+  display: flex;
+  align-items: center;
 }
 
 .onoffswitch-checkbox {
-    display: none;
+  display: none;
 }
 
 .onoffswitch-label {
-    display: block;
-    overflow: hidden;
-    cursor: pointer;
-    border: 2px solid #999999;
-    border-radius: 20px;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 20px;
 }
 
 .onoffswitch-inner {
-    display: block;
-    width: 200%;
-    margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
+  display: block;
+  width: 200%;
+  margin-left: -100%;
+  transition: margin 0.3s ease-in 0s;
 }
 
 .onoffswitch-inner:before,
 .onoffswitch-inner:after {
-    display: block;
-    float: left;
-    width: 50%;
-    height: 30px;
-    padding: 0;
-    line-height: 30px;
-    font-size: 14px;
-    color: white;
-    font-family: Trebuchet, Arial, sans-serif;
-    font-weight: bold;
-    box-sizing: border-box;
+  display: block;
+  float: left;
+  width: 50%;
+  height: 30px;
+  padding: 0;
+  font-size: 14px;
+  color: white;
+  font-family: Trebuchet, Arial, sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+  line-height: 30px;
 }
 
 .onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 10px;
-    background-color: #34A7C1;
-    color: #FFFFFF;
+  content: "ON";
+  padding-left: 10px;
+  background-color: #34a7c1;
+  color: #ffffff;
 }
 
 .onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 10px;
-    background-color: #EEEEEE;
-    color: #999999;
-    text-align: right;
+  content: "OFF";
+  padding-right: 10px;
+  background-color: #eeeeee;
+  color: #999999;
+  text-align: right;
 }
 
 .onoffswitch-switch {
-    display: block;
-    width: 18px;
-    height: 18px;
-    margin: 6px;
-    background: #FFFFFF;
-    position: absolute;
-    top: 0;
-    bottom: 0; // right: 56px;
-    border: 2px solid #999999;
-    border-radius: 20px;
-    transition: all 0.3s ease-in 0s;
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: 16px 8px;
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 36px;
+  border-radius: 20px;
+  transition: all 0.3s ease-in 0s;
 }
 
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+  margin-left: 0;
 }
 
-.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch {
-    right: 0px;
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+  right: 0px;
 }
 
 .cover {
-    position: absolute;
-    height: 300px;
-    width: 300px;
-    border-radius: 50%;
-    background-color: #393843;
-    @include centerContainer();
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    color: white;
+  position: absolute;
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  background-color: #393843;
+  @include centerContainer();
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  color: white;
+  padding: 4%;
 }
 
 h2 {
-    display: block;
-    width: 100%;
-    text-align: center;
-    color: white;
-    margin: 25px 0 25px 0;
+  text-align: center;
+  margin: 0;
+  font-size: 3rem;
 }
 
 .playBtn {
-    outline: 0;
-    cursor: pointer;
-    border-radius: 50%;
-    background-color: $startBtnColor;
-    width: 50px;
-    height: 50px;
-    display: block;
-    border: 8px solid black;
-    padding: 0;
-    margin-left: 10px;
-      transition: all .2s ease-in-out;
+  cursor: pointer;
+  outline: 0;
+  border-radius: 50%;
+  background-color: $startBtnColor;
+  width: 50px;
+  height: 50px;
+  display: block;
+  border: 8px solid black;
+  padding: 0;
+  margin-left: 10px;
+  transition: all 0.2s ease-in-out;
 
-    &:hover {
+  &:hover {
     transform: scale(1.2);
-        }
+  }
 }
 
 .resetBtn {
-    @extend .playBtn;
-    background-color: orange;
+  @extend .playBtn;
+  background-color: orange;
 }
 
 .topSection {
-    @extend .bottomSection;
-    align-items: center;
+  @extend .bottomSection;
+  // align-items: center;
 }
 
 .bottomSection {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 
-    p {
+  p {
     display: block;
-    min-width: 100px;
+    min-width: 33%;
     text-align: center;
-    }
+    margin: 8px 0;
+    text-transform: uppercase;
+  }
 }
 
 .round {
-    background-color: black;
-    color: red;
-    width: 150px;
-    height: 50px;
-    border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: red;
+  width: 100%;
+  height: auto;
+  span {
     text-align: center;
-    line-height: 50px;
-    font-size: 1.8rem;
-    letter-spacing: .3rem;
+    background-color: black;
+    width: 50%;
+    height: auto;
+  }
+  span:first-child {
+    font-size: 0.5rem;
+    color: white;
+    padding: 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 4px 0 2px 0;
+  }
+
+  span:last-child {
+    font-size: 1.2rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 0 0 2px 0;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .gameContainer {
+    height: 500px;
+    width: 500px;
+  }
+
+  .cover {
+    height: 200px;
+    width: 200px;
+  }
+  #greenGamePiece,
+  #redGamePiece,
+  #yellowGamePiece,
+  #blueGamePiece {
+    border: 120px solid transparent;
+  }
+  .bottomSection {
+    font-size: 0.6rem;
+  }
+
+  .playBtn,
+  .resetBtn {
+    width: 40px;
+    height: 40px;
+  }
+  .onoffswitch-switch {
+    height: 10px;
+    width: 10px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .gameContainer {
+    height: 450px;
+    width: 450px;
+  }
+
+  .cover {
+    height: 175px;
+    width: 175px;
+  }
+  #greenGamePiece,
+  #redGamePiece,
+  #yellowGamePiece,
+  #blueGamePiece {
+    border: 110px solid transparent;
+  }
+  .bottomSection {
+    font-size: 0.6rem;
+  }
+
+  .playBtn,
+  .resetBtn {
+    width: 30px;
+    height: 30px;
+  }
+  .onoffswitch-switch {
+    height: 10px;
+    width: 10px;
+    margin: 8px 5px 8px 0;
+  }
 }
