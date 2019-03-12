@@ -35,7 +35,7 @@
     "html-webpack-plugin": "^2.29.0",
     "image-loader": "0.0.1",
     "img-loader": "^2.0.0",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.11.0",
     "postcss-loader": "^2.0.6",
     "prettier-standard": "^6.0.0",
     "purify-css": "^1.2.5",
