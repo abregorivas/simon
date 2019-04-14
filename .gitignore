@@ -3,3 +3,6 @@ node_modules
 npm-debug.log.*
 draft.md
 notes.txt
+.cache
+/dist
+/public/*.*
