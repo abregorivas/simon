@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classnames from "classnames";
 
 const GamePiece = ({
@@ -19,6 +20,14 @@ const GamePiece = ({
       }}
     />
   );
+};
+
+GamePiece.propTypes = {
+  classes: PropTypes.string,
+  color: PropTypes.string,
+  currentColor: PropTypes.string,
+  handlePlayerMove: PropTypes.func,
+  index: PropTypes.number
 };
 
 export default GamePiece;
