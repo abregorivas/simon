@@ -1,50 +1,41 @@
 {
   "name": "simon",
   "version": "1.0.0",
+  "private": true,
   "description": "A remake of the classic handheld game Simon",
-  "main": "server.js",
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "keywords": [],
   "author": "Roland Abregorivas",
   "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/abregorivas/simon.git"
-  },
-  "scripts": {
-    "clear": "rm  -r npm-debug.log*",
-    "git-deploy": "npm run build && git subtree push --prefix public origin gh-pages",
-    "format": "prettier-standard 'src/**/*.js'",
-    "dev": "webpack-dev-server -d --hot --inline --env.platform=default --progress --w",
-    "build": "webpack -p --env.production --env.platform=default --progress"
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.5.1",
+    "babel-eslint": "^10.0.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
+    "normalize.css": "^8.0.1",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "1.16.4",
+    "sass": "^1.18.0",
+    "uuid": "^3.3.2"
   },
   "dependencies": {
-    "jquery": "^3.2.1"
-  },
-  "devDependencies": {
-    "autoprefixer": "^7.1.2",
-    "babel-core": "^6.25.0",
-    "babel-eslint": "^7.2.3",
-    "babel-loader": "^7.1.1",
-    "babel-preset-env": "^1.6.0",
-    "clean-webpack-plugin": "^0.1.16",
-    "css-loader": "^0.28.4",
-    "eslint": "^4.3.0",
-    "eslint-plugin-html": "^3.1.1",
-    "extract-text-webpack-plugin": "^2.1.2",
-    "file-loader": "^0.11.2",
-    "glob": "^7.1.2",
-    "html-webpack-plugin": "^2.29.0",
-    "image-loader": "0.0.1",
-    "img-loader": "^2.0.0",
-    "node-sass": "^4.5.3",
-    "postcss-loader": "^2.0.6",
-    "prettier-standard": "^6.0.0",
-    "purify-css": "^1.2.5",
-    "purifycss-webpack": "^0.7.0",
-    "sass-loader": "^6.0.6",
-    "standard": "*",
-    "standard-loader": "^6.0.1",
-    "style-loader": "^0.18.2",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.6.1"
+    "classnames": "^2.2.6",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   }
 }

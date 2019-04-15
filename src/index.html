@@ -1,50 +1,19 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Simon Game</title>
-    <link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64 96x96" href="favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Russo+One" rel="stylesheet">
+    <!-- <link
+      rel="shortcut icon"
+      sizes="16x16 24x24 32x32 48x48 64x64 96x96"
+      href="favicon.ico"
+    /> -->
+  </head>
 
-</head>
-
-<body>
-
-    <div class="gameContainer">
-        <div id="greenGamePiece" data-colorindex="0">
-        </div>
-        <div id="redGamePiece" data-colorIndex="1">
-        </div>
-        <div id="yellowGamePiece" data-colorIndex="2">
-        </div>
-        <div id="blueGamePiece" data-colorIndex="3">
-        </div>
-    </div>
-
-    <div class="cover">
-        <h2>Simon</h2>
-        <div class="topSection">
-            <button class="playBtn"></button>
-            <button class="resetBtn"></button>
-            <div class="onoffswitch">
-                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" checked>
-                <label class="onoffswitch-label" for="myonoffswitch">
-        <span class="onoffswitch-inner"></span>
-        <span class="onoffswitch-switch"></span>
-    </label>
-            </div>
-        </div>
-        <div class="bottomSection">
-            <p>START</p>
-            <p>RESET</p>
-            <p>STRICT</p>
-        </div>
-        <div class="round">0</div>
-    </div>
-
-</body>
-
+  <body>
+    <div id="root">
+    <script src="index.js"></script>
+  </body>
 </html>
