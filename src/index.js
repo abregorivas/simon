@@ -41,7 +41,7 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     let handleCompAction = cb => {
       setTimeout(this.playCompMoves, 1000);
-      setTimeout(cb, this.state.gameRound * 1000);
+      setTimeout(cb, this.state.gameRound * 1200);
     };
 
     let switchPlayer = () => {
