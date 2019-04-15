@@ -2,14 +2,16 @@
   "name": "simon",
   "version": "1.0.0",
   "private": true,
-  "description": "A remake of the classic handheld game Simon",
   "scripts": {
     "format": "prettier --write \"src/**/*.{js,jsx}\"",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "dev": "parcel src/index.html",
     "build": "parcel build src/index.html"
   },
-  "keywords": [],
+  "keywords": [
+    "simon",
+    "react"
+  ],
   "author": "Roland Abregorivas",
   "license": "ISC",
   "devDependencies": {
