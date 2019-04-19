@@ -80,7 +80,7 @@ $startBtnColor: #ffff00;
 }
 
 body {
-  font-family: 'Russo One', sans-serif;
+  font-family: "Russo One", sans-serif;
   background: repeating-linear-gradient(
       45deg,
       #2b2b2b 0%,
@@ -105,7 +105,6 @@ body {
   border-radius: 400px;
   padding: 10px;
   transform-origin: 50% 50%;
-  animation: rotateGame 1.6s cubic-bezier(0.17, 0.89, 0.32, 2.08);
 }
 
 //======GAME PIECES======
@@ -137,21 +136,132 @@ body {
   margin: 5px 0 0 5px;
 }
 
+//======ROTATION ANIMATION======
+.rotate-enter {
+  transform: rotate(0deg);
+}
+.rotate-enter-active {
+  transform: rotate(180deg);
+  transition: transform 1.6s cubic-bezier(0.17, 0.89, 0.32, 2.08);
+}
+.rotate-exit {
+  transform: rotate(360deg);
+}
+.rotate-exit-active {
+  transform: rotate(0deg);
+  transition: transform 1.6s cubic-bezier(0.17, 0.89, 0.32, 2.08);
+}
+
 //======GLOW STYLES======
-.glow-green {
-  animation: glowGreen 0.3s 1;
+
+//Green
+.glow-green-enter {
+  box-shadow: none;
 }
 
-.glow-red {
-  animation: glowRed 0.3s 1;
+.glow-green-enter-active {
+  @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
 }
 
-.glow-yellow {
-  animation: glowYellow 0.3s 1;
+.glow-green-exit {
+  @include box-shadow-glow(0, 0, 10px, #fff, $green-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
 }
 
-.glow-blue {
-  animation: glowBlue 0.3s 1;
+.glow-green-exit-active {
+  box-shadow: none;
+}
+
+// Red
+.glow-red-enter {
+  box-shadow: none;
+}
+
+.glow-red-enter-active {
+  @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-red-exit {
+  @include box-shadow-glow(0, 0, 10px, #fff, $red-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-red-exit-active {
+  box-shadow: none;
+}
+
+// Yellow
+.glow-yellow-enter {
+  box-shadow: none;
+}
+
+.glow-yellow-enter-active {
+  @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-yellow-exit {
+  @include box-shadow-glow(0, 0, 10px, #fff, $yellow-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-yellow-exit-active {
+  box-shadow: none;
+}
+
+// Blue
+.glow-blue-enter {
+  box-shadow: none;
+}
+
+.glow-blue-enter-active {
+  @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-blue-exit {
+  @include box-shadow-glow(0, 0, 10px, #fff, $blue-piece-color);
+  transition: box-shadow 0.4s ease-in-out;
+}
+
+.glow-blue-exit-active {
+  box-shadow: none;
+}
+
+//BLINK ANIMATION
+@keyframes blink-animation {
+  0%,
+  60%,
+  100% {
+    color: red;
+  }
+  20%,
+  40%,
+  80% {
+    color: black;
+  }
+}
+
+// this is triggered with gameover && tryagain
+.blink {
+  animation: blink-animation 1s steps(5, start) 3;
+}
+
+// thise is used with react-transition-group
+.blink-enter {
+  color: black;
+}
+.blink-enter-active {
+  color: red;
+  transition: color 0.5s linear;
+}
+.blink-exit {
+  color: red;
+}
+.blink-exit-active {
+  color: black;
 }
 
 //======STRICT MODE======
@@ -196,14 +306,14 @@ body {
 }
 
 .onoffswitch-inner:before {
-  content: 'ON';
+  content: "ON";
   padding-left: 10px;
   background-color: #34a7c1;
   color: #ffffff;
 }
 
 .onoffswitch-inner:after {
-  content: 'OFF';
+  content: "OFF";
   padding-right: 10px;
   background-color: #eeeeee;
   color: #999999;
@@ -277,11 +387,9 @@ h2 {
 }
 
 .topSection {
-  // @extend .bottomSection;
   display: flex;
   justify-content: space-around;
   width: 100%;
-  // align-items: center;
 }
 
 .bottomSection,
