@@ -1,33 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
+import { CSSTransition } from "react-transition-group";
+import PlaySound from "./PlaySound";
 
-const GamePiece = ({
-  classes,
-  color,
-  currentColor,
-  handlePlayerMove,
-  index
-}) => {
-  let cx = classnames(classes, color == currentColor ? `glow-${color}` : null);
+const GamePiece = ({ sound, color, currentColor, handlePlayerMove }) => {
+  const [glow, toggleGlow] = useState(false);
+
+  useEffect(() => {
+    if (currentColor === color) {
+      setTimeout(function() {
+        toggleGlow(true);
+      }, 100);
+    }
+    return () => {
+      toggleGlow(false);
+    };
+  }, [currentColor]);
+
   return (
-    <div
-      role="presentation"
-      className={cx}
-      onClick={e => {
-        e.preventDefault;
-        handlePlayerMove(index, true);
-      }}
-    />
+    <CSSTransition in={glow} timeout={400} classNames={`glow-${color}`}>
+      <PlaySound
+        color={color}
+        sound={sound}
+        currentColor={currentColor}
+        handlePlayerMove={handlePlayerMove}
+      />
+    </CSSTransition>
   );
 };
 
 GamePiece.propTypes = {
-  classes: PropTypes.string,
+  sound: PropTypes.string,
   color: PropTypes.string,
   currentColor: PropTypes.string,
-  handlePlayerMove: PropTypes.func,
-  index: PropTypes.number
+  handlePlayerMove: PropTypes.func
 };
 
 export default GamePiece;
