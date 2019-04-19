@@ -1,92 +1,92 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import GamePiece from "./components/GamePiece";
 import "normalize.css";
 import "./styles/main.scss";
 import greenSound from "./sounds/simonSound1.mp3";
 import redSound from "./sounds/simonSound2.mp3";
 import yellowSound from "./sounds/simonSound3.mp3";
 import blueSound from "./sounds/simonSound4.mp3";
-import gameOver from "./sounds/gameover.mp3";
-import uuidv1 from "uuid";
+import gameOverSound from "./sounds/gameover.mp3";
+import GameControls from "./components/GameControls";
+import { CSSTransition } from "react-transition-group";
+import { generateCompMoves, timeout } from "./utilities/index";
+import GamePiece from "./components/GamePiece";
+let gameSounds = [greenSound, redSound, yellowSound, blueSound];
 
 class App extends Component {
   state = {
     loading: true,
     colors: ["green", "red", "yellow", "blue"],
-    gameSounds: [greenSound, redSound, yellowSound, blueSound, gameOver],
-    gameRound: 0,
-    gameOn: false,
-    playerTurn: false,
-    compMoves: [0, 1, 2, 3],
+    gameRound: null,
+    gameOn: null,
+    playerTurn: null,
+    compMoves: [],
     playerMoves: [],
     currentColor: null,
-    message: false,
-    playerMoved: false
+    strict: true
   };
 
   componentDidMount() {
-    const start = function(cb1, cb2) {
-      setTimeout(cb1, 1700);
-      setTimeout(cb2, 5000);
+    this.initializeGame();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    let handleTrygain = () => {
+      this.setState({ gameRound: prevState.gameRound });
     };
 
-    start(this.loadingAnimation, this.initializeGame);
+    if (this.state.gameRound === "Try Again") {
+      setTimeout(handleTrygain, 2000);
+    }
   }
 
   componentWillUnmount() {
     this.resetGame();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    let handleCompAction = cb => {
-      setTimeout(this.playCompMoves, 1000);
-      setTimeout(cb, this.state.gameRound * 1200);
-    };
-
-    let switchPlayer = () => {
-      this.setState({ playerTurn: true });
-    };
-
-    let endPlayersTurn = () => {
+  initializeGame = () => {
+    let setInitialGameState = () => {
       this.setState({
-        playerTurn: false,
-        currentColor: "",
-        gameRound: this.state.gameRound + 1,
-        playerMoves: [],
-        playerMoved: false
+        compMoves: generateCompMoves(50),
+        gameOn: false,
+        playerTurn: true,
+        gameRound: 0
       });
     };
 
-    if (prevState.gameRound < this.state.gameRound && !this.state.playerTurn) {
-      handleCompAction(switchPlayer);
-    }
-
-    if (this.state.playerTurn && this.state.playerMoved) {
-      this.playSound(this.state.colors.indexOf(this.state.currentColor));
-      this.setState({ playerMoved: false });
-      if (this.state.playerMoves.length == this.state.gameRound) {
-        setTimeout(endPlayersTurn, 400);
+    this.setState(
+      () => ({ loading: false }),
+      () => {
+        setTimeout(
+          this.playCompMoves.bind(this, [0, 1, 2, 3], setInitialGameState),
+          1400
+        );
       }
+    );
+  };
+
+  startGame = () => {
+    let { gameRound } = this.state;
+
+    if (gameRound === 0 || gameRound === "Game Over") {
+      this.setState(
+        () => ({
+          gameOn: true,
+          gameRound: 1
+        }),
+        () => this.playCompMoves(null, this.endCompTurn)
+      );
     }
-  }
-
-  loadingAnimation = () => {
-    this.playCompMoves([0, 1, 2, 3]);
   };
 
-  initializeGame = () => {
-    this.setState({
-      compMoves: this.generateCompMoves(50),
-      loading: false
-    });
-  };
-
-  playCompMoves = moves => {
-    let { compMoves, gameRound } = this.state;
+  playCompMoves = (moves, cb) => {
+    let { compMoves, gameRound, colors } = this.state;
     let playablemoves = moves ? moves : compMoves.slice(0, gameRound);
-    let glow = this.pressColor;
-    let playSound = this.playSound;
+
+    let setColor = index => {
+      this.setState({ currentColor: colors[index] });
+    };
+
     let resetColor = () => {
       this.setState({ currentColor: "" });
     };
@@ -95,10 +95,10 @@ class App extends Component {
       setTimeout(
         (function(i) {
           return function() {
-            playSound(playablemoves[i]);
-            glow(playablemoves[i]);
-            if (i + 1 === playablemoves.length) {
-              setTimeout(resetColor, 500);
+            setColor(playablemoves[i]);
+            resetColor();
+            if (i == playablemoves.length - 1) {
+              setTimeout(cb, 500);
             }
           };
         })(i),
@@ -107,157 +107,128 @@ class App extends Component {
     }
   };
 
-  startGame = () => {
-    let { loading } = this.state;
+  endCompTurn = () => {
+    this.setState({ playerTurn: true });
+  };
 
-    if (!loading) {
+  playerMove = userColor => {
+    let { colors, playerMoves, gameRound, playerTurn } = this.state;
+    let index = colors.indexOf(userColor);
+    let setColor = userColor => {
+      this.setState({ currentColor: userColor });
+    };
+
+    let recordPlayerMove = () => {
       this.setState({
-        gameOn: true,
-        gameRound: 1,
-        message: false,
-        playerMoves: []
+        playerMoves: playerMoves.concat([index]),
+        currentColor: ""
       });
-    }
-  };
+    };
 
-  generateRandNum = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
+    let endPlayersTurn = () => {
+      this.setState(
+        prevState => ({
+          playerTurn: false,
+          currentColor: "",
+          gameRound: prevState.gameRound + 1,
+          playerMoves: []
+        }),
+        () => this.playCompMoves(null, this.endCompTurn)
+      );
+    };
 
-  generateCompMoves = len => {
-    let results = [];
-    for (let i = 0; i < len; i++) {
-      results.push(this.generateRandNum(0, 3));
-    }
-    return results;
-  };
-
-  resetGame = () => {
-    let { loading, gameOn } = this.state;
-    if (!loading && gameOn) {
-      this.setState({
-        playerMoves: [],
-        gameRound: 0,
-        compMoves: this.generateCompMoves(50),
-        gameOn: false,
-        playerTurn: false,
-        currentColor: null,
-        message: false
-      });
-    }
-  };
-
-  pressColor = (index, playerClicked) => {
-    let { colors } = this.state;
-    if (playerClicked) {
-      this.setState({
-        currentColor: colors[index],
-        playerMoved: true
-      });
-    } else {
-      this.setState({ currentColor: colors[index] });
-    }
-  };
-
-  playSound = index => {
-    let { gameSounds } = this.state;
-    let audio = new Audio(gameSounds[index]);
-    audio.play();
-  };
-
-  playerMove = (index, playerClicked) => {
-    let { playerTurn } = this.state;
-
-    if (playerTurn) {
-      this.pressColor(index, playerClicked);
-      if (this.checkPlayerMove(index)) {
-        this.recordPlayerMove(index);
+    let makeMove = (nextTurn, endTurn) => {
+      if (playerMoves.length + 1 === gameRound) {
+        timeout(endTurn, 1000);
       } else {
-        this.gameOver();
+        timeout(nextTurn, 50);
+      }
+    };
+
+    if (playerTurn && gameRound > 0) {
+      setColor(userColor);
+      if (this.checkPlayerMove(userColor)) {
+        makeMove(recordPlayerMove, endPlayersTurn);
+      } else {
+        if (this.state.strict) {
+          this.gameOver();
+        } else {
+          this.tryAgain();
+        }
       }
     }
   };
 
-  checkPlayerMove = index => {
-    let { compMoves, playerMoves, gameRound } = this.state;
-    let comp = compMoves.slice(0, gameRound + 1);
+  checkPlayerMove = color => {
+    let { colors, compMoves, playerMoves, gameRound } = this.state;
+    let index = colors.indexOf(color);
     let player = playerMoves.slice(0, gameRound + 1).concat([index]);
-
-    var noMatchCount = 0;
-    player.forEach((el, index) => {
-      if (el !== comp[index]) {
-        noMatchCount += 1;
-      }
-    });
-    return noMatchCount > 0 ? false : true;
+    let comp = compMoves.slice(0, player.length);
+    // only good if array does not have any opjects
+    return JSON.stringify(player) === JSON.stringify(comp) ? true : false;
   };
 
-  recordPlayerMove = index => {
-    let { playerMoves } = this.state;
-    this.setState({ playerMoves: playerMoves.concat([index]) });
+  resetGame = (cb, resetTrigger) => {
+    if (this.state.playerTurn) {
+      this.setState(
+        () => ({
+          playerMoves: [],
+          gameRound: resetTrigger,
+          compMoves: generateCompMoves(50),
+          gameOn: false,
+          playerTurn: true,
+          currentColor: ""
+        }),
+        () => {
+          if (cb) cb();
+        }
+      );
+    }
   };
 
   gameOver = () => {
-    this.setState({
-      playerTurn: false,
-      gameRound: 0,
-      gameOn: false,
-      message: "Game Over",
-      playerMoved: false,
-      currentColor: "",
-      compMoves: this.generateCompMoves(50)
-    });
-    this.playSound(4);
+    let playSound = () => {
+      let audio = new Audio(gameOverSound);
+      audio.play();
+    };
+
+    this.resetGame(playSound, "Game Over");
+  };
+
+  tryAgain = () => {
+    let audio = new Audio(gameOverSound);
+    audio.play();
+    this.setState({ gameRound: "Try Again", playerMoves: [] });
+  };
+
+  toggleStrictMode = () => {
+    this.setState(prevState => ({ strict: !prevState.strict }));
   };
 
   render() {
-    let { gameRound, colors, currentColor, message } = this.state;
+    let { colors, gameRound, currentColor, strict } = this.state;
     return (
-      <div>
+      <CSSTransition in={this.state.loading} timeout={1500} classNames="rotate">
         <div className="gameContainer">
           {colors.map((color, index) => (
             <GamePiece
-              key={uuidv1()}
-              classes={`${color}GamePiece`}
+              key={color}
+              sound={gameSounds[index]}
               color={color}
-              currentColor={currentColor}
-              index={index}
               handlePlayerMove={this.playerMove}
+              currentColor={currentColor}
             />
           ))}
 
-          <div className="cover">
-            <h2>simon</h2>
-            <div className="topSection">
-              <button className="playBtn" onClick={this.startGame} />
-              <button className="resetBtn" onClick={this.resetGame} />
-              <div className="onoffswitch">
-                <input
-                  type="checkbox"
-                  name="onoffswitch"
-                  className="onoffswitch-checkbox"
-                  id="myonoffswitch"
-                  checked
-                  readOnly
-                />
-                <label className="onoffswitch-label" htmlFor="myonoffswitch">
-                  <span className="onoffswitch-inner" />
-                  <span className="onoffswitch-switch" />
-                </label>
-              </div>
-            </div>
-            <div className="bottomSection">
-              <p>Start</p>
-              <p>Reset</p>
-              <p>Strict</p>
-            </div>
-            <div className="round">
-              <span>Round</span>
-              {message ? <span>{message}</span> : <span>{gameRound}</span>}
-            </div>
-          </div>
+          <GameControls
+            handleGameStart={this.startGame}
+            handleGameReset={this.resetGame}
+            handleStrictModeToggle={this.toggleStrictMode}
+            gameRound={gameRound}
+            strict={strict}
+          />
         </div>
-      </div>
+      </CSSTransition>
     );
   }
 }
