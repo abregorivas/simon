@@ -22,7 +22,7 @@ const StrictModeToggle = ({ handleToggle, strict }) => {
 };
 
 StrictModeToggle.propTypes = {
-  strict: PropTypes.string,
+  strict: PropTypes.bool,
   handleToggle: PropTypes.func
 };
 
