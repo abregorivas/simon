@@ -6,7 +6,7 @@ The game is currently deployed through netlify and is playable [here](https://pe
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/67336568-5d7b-4427-93c3-f6234fba7581/deploy-status)](https://app.netlify.com/sites/perfectparadox-simongame/deploys)
 
-![alt text](./public/simon.png "Simon Game")
+![alt text](./simon.png "Simon Game")
 
 ### Usage & Installation
 
